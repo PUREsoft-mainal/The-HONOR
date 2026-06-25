@@ -1,7 +1,7 @@
 {
-  "name": "ouro-steps",
+  "name": "The-HONOR",
   "version": "1.0.0",
-  "description": "منصة OURO Steps الملكية المفتوحة",
+  "description": "منصة The HONOR الملكية المفتوحة",
   "main": "server/server.js",
   "scripts": {
     "server": "nodemon server/server.js",
