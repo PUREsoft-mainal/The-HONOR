@@ -84,6 +84,51 @@ const PrayerAssetSchema = new mongoose.Schema({
 });
 const PrayerAssetModel = mongoose.model('PrayerAsset', PrayerAssetSchema);
 
+// 1️⃣ بناء السكيمة السحابية للمنشورات بداخل MongoDB Atlas
+const PostSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    author: { type: String, required: true },
+    text: { type: String, default: '' },
+    image: { type: String, default: '' },
+    likes: { type: [String], default: [] }, // مصفوفة أسماء من ضغطوا لايك لمنع التكرار
+    comments: [{
+        user: String,
+        text: String,
+        time: String
+    }],
+    time: { type: String, required: true }
+});
+const PostModel = mongoose.models.Post || mongoose.model('Post', PostSchema);
+
+// 2️⃣ مسار API لإنشاء منشور جديد مع دعم رفع الصور من ملتر
+app.post('/api/posts/create', upload.single('postImage'), async (req, res) => {
+    try {
+        const { author, text } = req.body;
+        if (!author) return res.status(400).json({ success: false, message: "بيانات الناشر مفقودة" });
+
+        const newPost = new PostModel({
+            id: 'post_' + Date.now().toString(),
+            author: author.trim(),
+            text: text || '',
+            image: req.file ? `/uploads/${req.file.filename}` : '',
+            time: new Date().toLocaleString('ar-EG', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+        });
+
+        await newPost.save();
+        if (global.io) global.io.emit('new_facebook_post', newPost); // بث حي فوري
+
+        res.json({ success: true, post: newPost });
+    } catch (err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// 3️⃣ مسار API لجلب كافة المنشورات فور فتح المنصة
+app.get('/api/posts/all', async (req, res) => {
+    try {
+        const allPosts = await PostModel.find({}).sort({ _id: -1 }); // الأحدث أولاً كالفيس بوك
+        res.json(allPosts);
+    } catch (err) { res.json([]); }
+});
+
 // 👑 معيار حفظ الإعلانات الثنائية الموقوتة والموجهة بـ MongoDB
 const AdSchema = new mongoose.Schema({
     id: { type: String, required: true },
@@ -234,6 +279,39 @@ console.log("✅ تم دمج وتوصيل شريان السوكت بالخزان
 
 io.on('connection', (socket) => {
     console.log(`🔌 مستخدم متصل الآن: ${socket.id}`);
+
+        // أ) مستمع التفاعل باللايكات (ضغط/إلغاء الضغط التلقائي)
+    socket.on('like_facebook_post', async (data) => {
+        try {
+            const post = await PostModel.findOne({ id: data.postId });
+            if (!post) return;
+
+            if (post.likes.includes(data.username)) {
+                post.likes = post.likes.filter(u => u !== data.username); // إلغاء اللايك
+            } else {
+                post.likes.push(data.username); // وضع لايك
+            }
+            await post.save();
+            io.emit('facebook_post_updated', post);
+        } catch (e) { console.error(e); }
+    });
+
+    // ب) مستمع ضخ تعليق جديد على المنشور
+    socket.on('comment_facebook_post', async (data) => {
+        try {
+            const post = await PostModel.findOne({ id: data.postId });
+            if (!post) return;
+
+            post.comments.push({
+                user: data.username,
+                text: data.text,
+                time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+            });
+            await post.save();
+            io.emit('facebook_post_updated', post);
+        } catch (e) { console.error(e); }
+    });
+
 
     // سيتم وضع أحداث السوكيت هنا تباعاً، وهذا كود تعيين المشرفين بعد تصحيحه وحمايته:
     socket.on('assign_group_moderator', (data) => {
