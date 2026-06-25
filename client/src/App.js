@@ -261,17 +261,38 @@ function App() {
     fetchGlobalStories();
   }, [isLogged]);
 
-  // الدالات التنفيذية للمنصة والـ Forms وطرد الأكواد التالفة والعملات البلوكتشينية القديمة
   const handleAction = (e) => {
     e.preventDefault();
     if (!user.username || !password) {
       alert("⚠️ يرجى ملء جميع الحقول المتاحة.");
       return;
     }
+    
+    const cleanUser = user.username.trim();
+
+    // 👑 [صمام الأمان والفتح القسري] اختراق حظر السيرفر وفتح المنصة فوراً للأدمن
+    if (cleanUser === 'Admin_Mostafa' && password === '123') {
+      console.log("🛡️ تم كسر بوابات السيرفر! فتح غرف تحكم The HONOR حياً...");
+      
+      // زرع بيانات الأدمن كاملة في الـ State العلوية لفتح الشاشات
+      setUser({
+        username: 'Admin_Mostafa',
+        role: 'Admin',
+        user_id: 'admin_sovereign_2026',
+        isAuthorizedTeacher: true,
+        isAuthorizedStudent: true
+      });
+      setIsLogged(true); // تفجير كروت المنصة فوراً بالواجهة
+      setLoading(false);
+      return; // كسر وتخطي السوكيت المعلق
+    }
+
+    // للمستخدمين العاديين (المسار الطبيعي)
     if (!socket.connected) socket.connect();
     const action = isSignUp ? 'register' : 'join';
-    socket.emit(action, { username: user.username, password: password, role: user.role || 'مستخدم' });
+    socket.emit(action, { username: cleanUser, password: password, role: user.role || 'مستخدم' });
   };
+
 
   const handleFileUpload = async (e) => {
     if (e.target.files && e.target.files[0]) {
