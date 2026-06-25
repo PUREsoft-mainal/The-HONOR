@@ -59,7 +59,7 @@ const writeCloudRequestsFile = (data) => {
 const PORT = process.env.PORT || 7860; // البورت المتوافق مع Hugging Face
 
 // 🔐 تنبيه أمني: يفضل نقل هذا الرابط لمتغيرات البيئة لحمايته
-const mongoURI = "mongodb+srv://ourosystem0_db_user:<Xx6OyoXqfqjfxyOp>@cluster0.cgfu89o.mongodb.net;
+const mongoURI = "mongodb+srv://ourosystem0_db_user:Xx6OyoXqfqjfxyOp@cluster0.cgfu89o.mongodb.net/TheHONOR?retryWrites=true&w=majority";
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ متصل بـ MongoDB Atlas بنجاح لـ The HONOR"))
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
@@ -534,32 +534,6 @@ io.on('connection', (socket) => {
     });
 
 });
-
-    // ==========================================================================
-    // 📩 [مستمع send_friend_request] إرسال طلب الصداقة وحفظه معلقاً بالـ Cloud
-    // ==========================================================================
-    socket.on('send_friend_request', async (data) => {
-        try {
-            const { currentUser, targetUser } = data;
-            if (!currentUser || !targetUser) return;
-
-            // تحديث حساب الطرف المستقبل وحقن اسم المرسل في قائمة طلباته الواردة (تم تصحيح اسم الموديل لحمايته من الـ Crash)
-            await usermodel.updateOne(
-                { username: targetUser.trim() },
-                { $addToSet: { friendRequests: currentUser.trim() } }
-            );
-
-            // جلب القائمة المحدثة بدون الباسوردات لإرسالها بأمان
-            const updatedUsers = await usermodel.find({}, { password: 0 }).sort({ username: 1 });
-            
-            // بث التحديث الشامل لكافة الأجهزة لإنعاش قوائم الصداقة لحظياً في الفرونت إند لـ The HONOR
-            io.emit('friend_updated', { usersList: updatedUsers });
-            
-        } catch (err) { 
-            console.error("❌ خطأ إرسال طلب الصداقة السحابي:", err); 
-        }
-    });
-
 // ==========================================================================
 // 📢 [مسار upload-ad] مسار رفع وتحديث الإعلانات الموقوعة والموجهة بـ MongoDB
 // ==========================================================================
