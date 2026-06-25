@@ -1,5 +1,5 @@
-FROM node:18
-WORKDIR /app
+FROM node:20
+WORKDIR /App
 
 # نسخ ملف الإعدادات من داخل مجلد السيرفر
 COPY server/package*.json ./
