@@ -202,19 +202,16 @@ app.get('/api/prayer/assets', async (req, res) => {
 // 📂 [إعداد مسارات الملفات ودوال الـ JSON الاحتياطية]
 // ==========================================
 
-const CONVERSATIONS_DIR = path.join(__dirname, 'conversations'); 
+// تعيين المسارات الحقيقية والديناميكية لـ The HONOR بناءً على مجلد السيرفر الفرعي
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const USERS_FILE = path.join(__dirname, 'users.json');
 const CHAT_FILE = path.join(__dirname, 'chat.json');
 const ADS_FILE = path.join(__dirname, 'ads.json');
-const GROUPS_LIST_FILE = path.join(__dirname, 'groups.json');
 
-// دوال مساعدة لقراءة وكتابة ملفات المجموعات بأمان
-const readJson = (filePath) => {
-    try {
-        if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([]));
-        return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    } catch (e) { return []; }
-};
+// التأكد من إنشاء مجلد الرفع فيزيائياً لو كان مفقوداً عند الإقلاع لحماية السيرفر من الـ Crash
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
 const writeJson = (filePath, data) => {
     try { fs.writeFileSync(filePath, JSON.stringify(data, null, 2)); } catch (e) { console.error(e); }
