@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../App.css'; 
 
-const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+// 👑 الربط السيادي الصحيح والفعلي بالسيرفر السحابي لـ The HONOR (حروف صغيرة كلياً)
+const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
 const PrayerWidget = ({ socket, user }) => { 
   // صب مواقيت الصلاة لمدينة القاهرة افتراضياً لمنع اختفاء الأرقام وتجميد الـ Grid نهائياً
