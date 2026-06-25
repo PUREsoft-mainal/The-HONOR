@@ -1,15 +1,27 @@
 {
-  "name": "the-honor-system",
+  "name": "The-HONOR",
   "version": "1.0.0",
-  "main": "server.js",
+  "description": "منصة The-HONOR الملكية المفتوحة",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server.js"
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.14"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "ejs": "^3.1.9",
+    "@google/genai": "latest",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "mongoose": "^8.0.0"
+    "googleapis": "^144.0.0",
+    "mongoose": "^8.4.1",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.5"
   }
 }
