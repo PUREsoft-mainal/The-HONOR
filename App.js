@@ -141,3 +141,4 @@ app.post('/posts/comment/:id', checkAuth, async (req, res) => {
 module.exports = app; // تصدير التطبيق لـ Vercel
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`منصة The HONOR تعمل على منفذ ${PORT}`));
+

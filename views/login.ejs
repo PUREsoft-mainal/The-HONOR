@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>The HONOR - تسجيل الدخول</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; direction: rtl; margin:0;}
+        .login-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        h2 { color: #1877f2; margin-bottom: 5px; }
+        h4 { color: #65676b; margin-top:0; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { background: #1877f2; color: white; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #166fe5; }
+        .error { color: red; font-size: 13px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>The HONOR</h2>
+        <h4>نظام الإدارة والمنشورات الداخلي</h4>
+        <% if(typeof error !== 'undefined') { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="اسم الموظف المستخرج" required>
+            <input type="password" name="password" placeholder="كلمة المرور" required>
+            <button type="submit">تسجيل الدخول للمنصة</button>
+        </form>
+    </div>
+</body>
+</html>
+

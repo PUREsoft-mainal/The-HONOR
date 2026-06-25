@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>The HONOR - منصة الإدارة العامة</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <header>
+        <!-- شريط الموظف المطور بدلاً من شريط اسم المستخدم القديم -->
+        <div class="employee-bar">
+            <div>📋 الموظف الحالي: <strong><%= user.username %></strong> [معرف: <%= user.emp_id %>] <% if(user.role==='admin'){ %>(مدير النظام)<% } %></div>
+            <a href="/logout">تسجيل الخروج 🚪</a>
+        </div>
+
+        <!-- شريط الأزرار في أعلى الهيدر -->
+        <div class="nav-buttons-bar">
+            <a href="/" class="btn-nav">🏠 الرئيسية</a>
+            <% if(user.role === 'admin') { %>
+                <button onclick="showNewEmpModal()" class="btn-nav btn-new-emp">➕ موظف جديد</button>
+            <% } %>
+            <button onclick="alert('ملفات الشركة وتحديثاتها قيد الصيانة')" class="btn-nav">📂 المستندات</button>
+            <button onclick="alert('مجموعات التواصل الداخلي')" class="btn-nav">💬 المجموعات</button>
+        </div>
+
+        <!-- اللوجو بين شريط الأزرار ومساحة المنشورات -->
+        <div class="logo-container">
+            <img src="/images/logo.png" alt="The HONOR Logo" onerror="this.style.display='none'; this.after('✨ شركة The HONOR ✨')">
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- صندوق النشر للآدمن فقط -->
+        <% if(user.role === 'admin') { %>
+            <div class="admin-publish-box">
+                <form action="/posts/create" method="POST">
+                    <textarea name="content" placeholder="ماذا تريد مشاركته مع موظفي The HONOR اليوم يا أدمن؟" required></textarea>
+                    <button type="submit">نشر المنشور للشركة</button>
+                </form>
+            </div>
+        <% } %>
+
+        <!-- مساحة عرض منشورات الفيس بوك -->
+        <div class="posts-stream">
+            <% posts.forEach(post => { %>
+                <div class="fb-post">
+                    <div class="post-header">
+                        <div class="author-info">
+                            <div class="author-avatar">H</div>
+                            <div>
+                                <div class="author-name">The HONOR (الآدمن)</div>
+                                <div class="post-time"><%= new Date(post.created_at).toLocaleString('ar-EG') %></div>
+                            </div>
+                        </div>
+                        
+                        <!-- أزرار التعديل والحذف للآدمن فقط -->
+                        <% if(user.role === 'admin') { %>
+                            <div class="admin-actions">
+                                <button onclick="editPost('<%= post.id %>', `<%= post.content %>`)" class="btn-action-post">✏️ تعديل</button>
+                                <form action="/posts/delete/<%= post.id %>" method="POST" style="display:inline;" onsubmit="return confirm('هل أنت متأكد من الحذف الحتمي للمنشور؟')">
+                                    <button type="submit" class="btn-action-post delete">🗑️ حذف</button>
+                                </form>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="post-content"><%= post.content %></div>
+
+                    <div class="post-stats">
+                        <span>👍 <%= post.likes_count %> إعجاب</span>
+                        <span>💬 <%= post.comments ? post.comments.length : 0 %> تعليق</span>
+                    </div>
+
+                    <!-- التفاعلات المحددة بدون زر مشاركة -->
+                    <div class="post-interactions">
+                        <form action="/posts/like/<%= post.id %>" method="POST">
+                            <button type="submit" class="interact-btn <%= post.user_liked ? 'liked' : '' %>">
+                                👍 <%= post.user_liked ? 'تم الإعجاب' : 'إعجاب' %>
+                            </button>
+                        </form>
+                        <button class="interact-btn" onclick="document.getElementById('comment-inp-<%= post.id %>').focus()">
+                            💬 تعليق
+                        </button>
+                    </div>
+
+                    <!-- قسم التعليقات الفيس بوك -->
+                    <div class="comments-section">
+                        <% if(post.comments && post.comments.length > 0) { %>
+                            <% post.comments.forEach(comment => { %>
+                                <div class="comment-box">
+                                    <div>
+                                        <span class="comment-user"><%= comment.emp_username %>:</span>
+                                        <span><%= comment.content %></span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+
+                        <!-- نموذج إضافة تعليق موظف -->
+                        <form action="/posts/comment/<%= post.id %>" method="POST" class="comment-form">
+                            <input type="text" name="comment_content" id="comment-inp-<%= post.id %>" class="comment-input" placeholder="اكتب تعليقاً باسمك..." required>
+                            <button type="submit" class="comment-submit">↩️</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <script>
+        // دالة إضافة موظف جديد واستخراج الهوية الحصرية بكلمة المرور
+        function showNewEmpModal() {
+            const username = prompt("أدخل اسم الموظف الجديد الرباعي (سيتم استخدامه كاسم مستخدم):");
+            if (!username) return;
+
+            fetch('/employees/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert(`🎉 تم تسجيل الموظف الجديد بنجاح!\n\nاسم المستخدم: ${data.data.username}\nكلمة المرور المستخرجة: ${data.data.rawPassword}\nكود الموظف الثابت (ID): ${data.data.empId}\n\n⚠️ يرجى تصوير الشاشة وتسليم البيانات للموظف بدقة.`);
+                    window.location.reload();
+                } else {
+                    alert("خطأ: " + data.message);
+                }
+            });
+        }
+
+        // دالة تعديل المنشور
+        function editPost(id, oldContent) {
+            const newContent = prompt("تعديل محتوى المنشور الحامي لشركة The HONOR:", oldContent);
+            if (newContent && newContent.trim() !== "") {
+                fetch(`/posts/edit/${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: newContent })
+                }).then(() => window.location.reload());
+            }
+        }
+    </script>
+</body>
+</html>
+
