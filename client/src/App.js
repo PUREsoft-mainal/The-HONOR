@@ -18,12 +18,13 @@ import './App.css';
 // 👑 الربط السيادي الصحيح والفعلي بالسيرفر السحابي لـ The HONOR (حروف صغيرة كلياً)
 const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
-// 👑 تهيئة السوكت النقي والمتوافق مع جدار حماية خوادم Hugging Face دون تداخل
+// 👑 [إصلاح حماية Hugging Face] تهيئة السوكت المطور المتوافق مع جدار حماية خوادم HF
 const socket = io(API_BASE, { 
-  transports: ['websocket', 'polling'], 
+  transports: ['polling', 'websocket'], // البدء التلقائي بالـ polling لضمان العبور ثم الترقية
+  path: '/socket.io/', // تثبيت المسار القياسي
   secure: true,
-  reconnectionAttempts: 15,
-  reconnectionDelay: 1000,
+  reconnectionAttempts: 20,
+  reconnectionDelay: 1500,
   rejectUnauthorized: false
 });
 
