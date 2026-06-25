@@ -1,5 +1,5 @@
-FROM node:20
-WORKDIR /App
+FROM node:18
+WORKDIR /app
 
 # نسخ ملف الإعدادات من داخل مجلد السيرفر
 COPY server/package*.json ./
@@ -16,3 +16,4 @@ ENV PORT=7860
 EXPOSE 7860
 
 CMD ["node", "server/server.js"]
+
