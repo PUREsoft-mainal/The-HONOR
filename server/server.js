@@ -11,13 +11,18 @@ const { GoogleGenAI } = require('@google/genai');
 const app = express();
 const server = http.createServer(app);
 
-// 🌐 إعداد كائن الـ Socket.io أولاً لتجنب أخطاء التعريف اللاحقة
+// 🌐 إعداد كائن الـ Socket.io المطور والمؤمن سيبرانياً لـ The HONOR
 const io = new Server(server, {
     cors: {
+        // السماح بالروابط الحقيقية (بحروف صغيرة) المعتمدة للفرونت إند والسيرفر
         origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+        credentials: true // 👑 صمام الأمان لتمرير شهادات الأمان وبوابات الأندرويد والويب بنقاء
+    },
+    transports: ['websocket', 'polling'], // 🚀 إجبار السيرفر على التبديل التلقائي الحامي من الحظر السحابي
+    allowEIO3: true // دعم التوافق الرجعي للمتصفحات القديمة لحظر الـ Crash
 });
+
 
 // 📂 تعريف مسار ملف الطلبات الثابت لمنع الـ Crash
 const REQUESTS_FILE_PATH = path.join(__dirname, 'cloud_requests.json');
