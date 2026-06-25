@@ -15,7 +15,8 @@ import Market from './components/Market';
 import './App.css';
 
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face لـ The HONOR
-const API_BASE = "https://hf.space";
+// 👑 الربط السيادي الصحيح والفعلي بالسيرفر السحابي لـ The HONOR (حروف صغيرة كلياً)
+const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
 // 👑 تهيئة السوكت النقي والمتوافق مع جدار حماية خوادم Hugging Face دون تداخل
 const socket = io(API_BASE, { 
