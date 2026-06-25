@@ -6,6 +6,12 @@
       "config": { "distDir": "build" }
     }
   ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
