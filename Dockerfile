@@ -2,7 +2,7 @@
 FROM node:20
 
 # تحديد مجلد العمل داخل السيرفر
-WORKDIR /app
+WORKDIR /App
 
 # نسخ ملفات الحزم أولاً لتثبيتها
 COPY package*.json ./
