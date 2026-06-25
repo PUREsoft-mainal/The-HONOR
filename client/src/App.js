@@ -214,21 +214,6 @@ function App() {
       }
     };
   }, [currentGroup.id, user]);
-  // 🏛️ [تثبيت وحسم رخصة الشركات] - منع الاختفاء والتحصين الشامل بالـ State العلوية
-  useEffect(() => {
-    if (socket) {
-      socket.on('company_system_granted', (data) => {
-        if (data && data.username === user?.username) {
-          setUser(prevUser => ({
-            ...prevUser,
-            canAccessCompanySystem: true,
-            companySystemExpiry: data.companySystemExpiry
-          }));
-        }
-      });
-    }
-    return () => { if (socket) socket.off('company_system_granted'); };
-  }, [user?.username]);
 
   // يوضع داخل الـ useEffect الرئيسي لاستقبال ومزامنة المنشورات حياً
 axios.get(`${API_BASE}/api/posts/all`).then(res => setFacebookPosts(res.data || []));
@@ -259,20 +244,6 @@ socket.on('facebook_post_updated', (updatedPost) => {
 
     return () => clearInterval(adsInterval);
   }, [isLogged]); 
-
-  // 👑 دالة مستقلة ومعزولة كلياً لجلب الستوريات (القصص) لعدم تداخل خطأ الـ 404
-  useEffect(() => {
-    const fetchGlobalStories = async () => {
-      if (!isLogged) return;
-      try {
-        const res = await axios.get(`${API_BASE}/api/stories`);
-        if (res.data) setFiles(res.data);
-      } catch (err) {
-        setFiles([]); 
-      }
-    };
-    fetchGlobalStories();
-  }, [isLogged]);
 
   const handleAction = (e) => {
     e.preventDefault();
@@ -319,19 +290,7 @@ socket.on('facebook_post_updated', (updatedPost) => {
       }
     }
   };
-
-  const handleSwitchRoom = (roomId) => {
-    if (!roomId) return;
-    socket.emit('join_group_room', { roomId });
-    const target = groups.find(g => g.id === roomId);
-    if (target) setCurrentGroup(target);
-  };
-
-  const handleCreateGroup = () => {
-    const name = prompt("أدخل اسم المجموعة المخصصة الجديدة:");
-    if (name && name.trim()) socket.emit('create_group', { name });
-  };
-
+  
   const handleMarketUpload = async (formData) => {
     try {
       const res = await axios.post(`${API_BASE}/api/upload-market`, formData, {
