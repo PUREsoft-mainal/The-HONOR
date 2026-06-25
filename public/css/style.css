@@ -5,10 +5,13 @@
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  direction: rtl; 
 }
-body {
- background-color: #f0f2f5;
- color: #1c1e21;
- padding-bottom: 50px; 
+body { 
+    background-image: url('/images/bg.png'); /* استدعاء صورة الخلفية السحابية */
+    background-size: cover; /* جعل الصورة تغطي الشاشة بالكامل */
+    background-position: center; /* تمليط الصورة في المنتصف */
+    background-attachment: fixed; /* جعل الخلفية ثابتة أثناء التمرير لأسفل لمنح مظهر عصري */
+    color: #1c1e21; 
+    padding-bottom: 50px; 
 }
 
 /* الهيدر المتتابع */
