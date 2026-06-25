@@ -363,6 +363,20 @@ socket.on('facebook_post_updated', (updatedPost) => {
           setShowAdsManagerModal={setShowAdsManagerModal} // 👈 حقن الدالة الجديدة حياً
         />
 
+                    {/* 🧱 [التطهير الهيكلي والتحول الشامل] - ساحة البث العام للمنشورات الشفافة لـ The HONOR */}
+        <div className="main-content" style={{ display: 'block', padding: '20px 0', minHeight: '60vh' }}>
+          
+          <FeedSection 
+            posts={facebookPosts}
+            setPosts={setFacebookPosts}
+            user={user}
+            socket={socket}
+            apiBase={API_BASE}
+          />
+
+        </div>
+
+
         <div className="main-content">
             
           <GroupsSidebar 
