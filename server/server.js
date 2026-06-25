@@ -14,14 +14,14 @@ const server = http.createServer(app);
 // 🌐 إعداد كائن الـ Socket.io المطور والمؤمن سيبرانياً لـ The HONOR
 const io = new Server(server, {
     cors: {
-        // السماح بالروابط الحقيقية (بحروف صغيرة) المعتمدة للفرونت إند والسيرفر
-        origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
+        origin: ["https://vercel.app", "https://hf.space"],
         methods: ["GET", "POST"],
-        credentials: true // 👑 صمام الأمان لتمرير شهادات الأمان وبوابات الأندرويد والويب بنقاء
+        credentials: true 
     },
-    transports: ['websocket', 'polling'], // 🚀 إجبار السيرفر على التبديل التلقائي الحامي من الحظر السحابي
-    allowEIO3: true // دعم التوافق الرجعي للمتصفحات القديمة لحظر الـ Crash
+    transports: ['polling', 'websocket'], // تطابق وجوبي مع الفرونت إند لمنع رفض الاتصال
+    allowEIO3: true 
 });
+
 
 
 // 📂 تعريف مسار ملف الطلبات الثابت لمنع الـ Crash
