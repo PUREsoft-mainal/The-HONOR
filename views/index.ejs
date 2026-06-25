@@ -8,6 +8,8 @@
 <body>
 
     <header>
+        <link rel="icon" type="image/png" href="/favicon.png">
+
         <!-- 1. شريط الموظف المطور في الأعلى تماماً بدلاً من شريط اسم المستخدم -->
         <div class="employee-bar">
             <div>👤 الموظف الحالي: <strong><%= user.username %></strong> | المعرّف الحصري: [<%= user.emp_id %>] <% if(user.role==='admin'){ %>(المدير العام)<% } %></div>
