@@ -11,7 +11,8 @@ import UploadSidebar from './components/UploadSidebar';
 import LoginBox from './components/LoginBox';
 import PrayerWidget from './components/PrayerWidget'; 
 import AdSliderBottom from './components/AdSliderBottom';
-import Market from './components/Market'; 
+import Market from './components/Market';
+import FeedSection from './components/FeedSection';
 import './App.css';
 
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face لـ The HONOR
@@ -54,7 +55,8 @@ function App() {
   const [companyRequests, setCompanyRequests] = useState([]); 
   const [newPost, setNewPost] = useState({ description: '', price: '', files: [] });
   const [showAdsManagerModal, setShowAdsManagerModal] = useState(false); // كبسولة فتح لوحة الإعلانات
-
+  const [facebookPosts, setFacebookPosts] = useState([]);
+  
   // 👑 المزامنة الحية الصافية واستقبال قنوات بث المتجر لحظياً في السحاب لـ The HONOR
   useEffect(() => {
     if (isLogged && socket) {
@@ -227,6 +229,15 @@ function App() {
     }
     return () => { if (socket) socket.off('company_system_granted'); };
   }, [user?.username]);
+
+  // يوضع داخل الـ useEffect الرئيسي لاستقبال ومزامنة المنشورات حياً
+axios.get(`${API_BASE}/api/posts/all`).then(res => setFacebookPosts(res.data || []));
+
+socket.on('new_facebook_post', (post) => setFacebookPosts(prev => [post, ...prev]));
+socket.on('facebook_post_updated', (updatedPost) => {
+    setFacebookPosts(prev => prev.map(p => p.id === updatedPost.id ? updatedPost : p));
+});
+
 
   // 👑 مراقبة وجلب دوري مستقل لشريط الإعلانات كل 15 دقيقة (آمن ومحمي من الـ Infinite Loop القاتل)
   useEffect(() => {
