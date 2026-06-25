@@ -4,7 +4,8 @@ import '../App.css'; // استدعاء ملف التنسيق الشامل ليع
 
 const GroupsSidebar = ({ groups, onCreateGroup, user, currentGroup, onJoinRoom, socket }) => {
   // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
-  const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+// 👑 الربط السيادي الصحيح والفعلي بالسيرفر السحابي لـ The HONOR (حروف صغيرة كلياً)
+const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
   // 🔥 [تم التطهير والإصلاح] تم حذف كود (const socket = io) المكرر والمسبب للكراش نهائياً من هنا
   // المكون سيعتمد الآن بنقاء كامل على الـ socket الممرر في الترويسة بالأعلى والمشفر من الـ App.js
