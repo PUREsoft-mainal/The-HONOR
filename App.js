@@ -138,5 +138,3 @@ app.post('/posts/comment/:id', checkAuth, async (req, res) => {
 })();
 
 module.exports = app;
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`المنصة تعمل ومستعدة بالمنفذ ${PORT}`));
