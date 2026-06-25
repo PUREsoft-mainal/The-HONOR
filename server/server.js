@@ -14,7 +14,7 @@ const server = http.createServer(app);
 // 🌐 إعداد كائن الـ Socket.io أولاً لتجنب أخطاء التعريف اللاحقة
 const io = new Server(server, {
     cors: {
-        origin: ["https://ouro-steps.vercel.app", "https://puresoft-mainal-ouro-steps.hf.space"],
+        origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
         methods: ["GET", "POST"]
     }
 });
@@ -59,7 +59,7 @@ const writeCloudRequestsFile = (data) => {
 const PORT = process.env.PORT || 7860; // البورت المتوافق مع Hugging Face
 
 // 🔐 تنبيه أمني: يفضل نقل هذا الرابط لمتغيرات البيئة لحمايته
-const mongoURI = "mongodb+srv://mostafa:01027411921@cluster0.kgw7td9.mongodb.net/ouro_db?retryWrites=true&w=majority";
+const mongoURI = "mongodb+srv://ourosystem0_db_user:<Xx6OyoXqfqjfxyOp>@cluster0.cgfu89o.mongodb.net;
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ متصل بـ MongoDB Atlas بنجاح لـ The HONOR"))
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
@@ -1102,4 +1102,3 @@ server.listen(PORT, "0.0.0.0", () => {
     console.log(`🕋 Connected to MongoDB Atlas & Ready for Hugging Face Cloud`);
     console.log(`===========================================================`);
 });
-
