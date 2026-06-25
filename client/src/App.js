@@ -53,6 +53,8 @@ function App() {
   const [showAdminPanelModal, setShowAdminPanelModal] = useState(false); 
   const [companyRequests, setCompanyRequests] = useState([]); 
   const [newPost, setNewPost] = useState({ description: '', price: '', files: [] });
+  const [showAdsManagerModal, setShowAdsManagerModal] = useState(false); // كبسولة فتح لوحة الإعلانات
+
   // 👑 المزامنة الحية الصافية واستقبال قنوات بث المتجر لحظياً في السحاب لـ The HONOR
   useEffect(() => {
     if (isLogged && socket) {
@@ -388,6 +390,7 @@ function App() {
           setDiscoveryTab={setDiscoveryTab} 
           setShowPrayerModal={setShowPrayerModal}
           setShowMarket={setShowMarket} 
+          setShowAdsManagerModal={setShowAdsManagerModal} // 👈 حقن الدالة الجديدة حياً
         />
 
         <div className="main-content">
@@ -525,6 +528,75 @@ function App() {
             </div>
           </div>
         )}
+
+        {/* ========================================================================== */}
+        {/* 📢 لوحة إدارة الإعلانات التفاعلية الموقوتة والموجهة للأدمن - لـ The HONOR */}
+        {/* ========================================================================== */}
+        {showAdsManagerModal && (
+          <div className="discovery-overlay" onClick={() => setShowAdsManagerModal(false)}>
+            <div className="discovery-window gold-border" onClick={e => e.stopPropagation()} style={{ width: '92%', maxWidth: '550px', background: '#0a0a0a', padding: '20px', borderRadius: '12px' }}>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', borderBottom: '1px solid var(--gold-primary)', paddingBottom: '8px' }}>
+                <h3 style={{ color: 'var(--gold-primary)', margin: 0, fontSize: '14px', fontWeight: 'bold' }}>📢 منظومة نشر وقنص الإعلانات التفاعلية الحية</h3>
+                <button className="close-discovery" onClick={() => setShowAdsManagerModal(false)}>×</button>
+              </div>
+
+              {/* أ) فورم رفع إعلان جديد مرتبط مباشرة بمسار السيرفر السحابي المطور */}
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                try {
+                  const res = await axios.post(`${API_BASE}/api/upload-ad`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                  });
+                  if (res.data.success) {
+                    alert("🎉 تم صب وحفظ الإعلان التفاعلي بنجاح وبثه لكافة المشتركين حياً!");
+                    e.target.reset();
+                  }
+                } catch (err) { alert("❌ خطأ أثناء رفع وتثبيت الإعلان بالسحاب"); }
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#111', padding: '12px', borderRadius: '8px' }}>
+                
+                <small style={{ color: '#fff', fontWeight: 'bold' }}>➕ رفع شريط إعلاني موقوت وموجه:</small>
+                <input type="file" name="adImage" accept="image/*" required style={{ color: '#fff', fontSize: '11px' }} />
+                <input type="text" name="link" placeholder="رابط التوجيه المباشر (اختياري)" style={{ padding: '6px', background: '#000', color: '#fff', border: '1px solid #333', borderRadius: '4px', fontSize: '11px' }} />
+                <input type="number" name="duration" placeholder="صلاحية العرض بالأيام (الحد الأدنى 30 يوم)" required style={{ padding: '6px', background: '#000', color: '#fff', border: '1px solid #333', borderRadius: '4px', fontSize: '11px' }} />
+                
+                <select name="location" required style={{ padding: '6px', background: '#000', color: '#fff', border: '1px solid #333', borderRadius: '4px', fontSize: '11px' }}>
+                  <option value="top">شريط علوي حصري ⬆️</option>
+                  <option value="bottom">شريط سفلي أفقي ⬇️</option>
+                </select>
+
+                <button type="submit" style={{ background: 'var(--gold-primary)', color: '#000', border: 'none', padding: '6px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '11px' }}>تأكيد النشر والبث الفوري 🚀</button>
+              </form>
+
+              {/* ب) قائمة الإعلانات الحالية لإبادتها وقنصها فيزيائياً وسحابياً فوراً */}
+              <div style={{ marginTop: '15px', maxHeight: '20vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <small style={{ color: 'var(--text-muted)', fontWeight: 'bold', display: 'block' }}>🗑️ الإعلانات النشطة حالياً بمجال رؤية الأعضاء:</small>
+                {ads.map(ad => (
+                  <div key={ad.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#111', padding: '6px 10px', borderRadius: '4px', border: '1px solid #222' }}>
+                    <img src={`${API_BASE}${ad.imgUrl}`} alt="Ad Preview" style={{ width: '60px', height: '25px', objectFit: 'cover', borderRadius: '2px' }} />
+                    <span style={{ color: 'var(--gold-primary)', fontSize: '10px' }}>📍 التوجيه: {ad.location === 'top' ? 'علوي' : 'سفلي'}</span>
+                    <button 
+                      style={{ background: '#c0392b', color: '#fff', border: 'none', padding: '2px 8px', borderRadius: '3px', fontSize: '10px', cursor: 'pointer' }}
+                      onClick={async () => {
+                        if (window.confirm("هل أنت متأكد من رغبتك في قنص وتدمير هذا الإعلان وصورته فيزيائياً؟")) {
+                          try {
+                            const res = await axios.delete(`${API_BASE}/api/delete-ad/${ad.id}`);
+                            if (res.data.success) alert(res.data.message);
+                          } catch (err) { alert("فشل الحذف الفيزيائي"); }
+                        }
+                      }}
+                    >
+                      إبادة ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+        )}
+
 
         {/* 🕋 نافذة مواقيت الصلاة المنبثقة الشاملة المتصلة بساعة السيرفر */}
         {showPrayerModal && (
