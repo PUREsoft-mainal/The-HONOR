@@ -1,16 +1,13 @@
 {
-  "version": 2,
-  "builds": [
+  "headers": [
     {
-      "src": "App.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "App.js"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        }
+      ]
     }
   ]
 }
-
