@@ -378,15 +378,7 @@ socket.on('facebook_post_updated', (updatedPost) => {
 
 
         <div className="main-content">
-            
-          <GroupsSidebar 
-            groups={groups} 
-            user={user} 
-            socket={socket}
-            currentGroup={currentGroup.id}
-            onJoinRoom={handleSwitchRoom}
-            onCreateGroup={handleCreateGroup} 
-          />
+          
 
           {/* المنتصف: منطقة الدردشة واستقبال وعرض رسائل الغرفة الحالية المأمنة لـ The HONOR */}
           <div className="chat-area-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px' }}>
