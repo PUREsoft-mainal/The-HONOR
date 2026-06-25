@@ -11,6 +11,7 @@ const ActionBar = ({
   friendRequestsCount, 
   setShowAdminPanelModal, 
   setShowDocEngineModal, // 👑 استقبال شريان تفعيل محرك المستندات
+  setShowAdsManagerModal  // 👑 [تم الحقن] شريان فتح لوحة إدارة الإعلانات التفاعلية الحية
 }) => {
 
   // 👑 مراجع ومحركات التحريك والتمرير الأفقي لشريط الأزرار الملكي بسلاسة
@@ -59,8 +60,16 @@ const ActionBar = ({
         </button>
 
         <button type="button" className="action-bar-btn" onClick={() => setShowMarket(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>🛒 المتجر المفتوح</button>  
+        {/* 📢 👑 [تم الحقن والحسم] زر إدارة الإعلانات التفاعلية الحية يظهر حصرياً للأدمن Mostafa داخل شريط التمرير */}
         {isAdmin && (
-          <button type="button" className="action-bar-btn" onClick={() => setShowAdminPanelModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#c0392b', color: '#c0392b', fontWeight: 'bold' }}>⚙️ طلبات الإدارة</button>
+          <button 
+            type="button" 
+            className="action-bar-btn admin-special-btn" 
+            onClick={() => { if (typeof setShowAdsManagerModal === 'function') setShowAdsManagerModal(true); }} 
+            style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#27ae60', color: '#27ae60', fontWeight: 'bold' }}
+          >
+            📢 إدارة الإعلانات
+          </button>
         )}
 
       </div>
