@@ -114,6 +114,7 @@ function App() {
       socket.on('error_msg', (msg) => alert("⚠️ " + msg));
     }
 
+    // 🧹 دالة التصفية الموحدة والشاملة لمنع تسريب الذاكرة لـ The HONOR
     return () => {
       if (socket) {
         socket.off('init_data');
@@ -121,9 +122,48 @@ function App() {
         socket.off('register_success');
         socket.off('update_ads');
         socket.off('error_msg');
+        // تم تطهير مستمعات الفيسبوك التفاعلية عند مغادرة الصفحة
+        socket.off('new_facebook_post');
+        socket.off('facebook_post_updated');
       }
     };
-  }, [currentGroup.id, user]);
+    
+  // 👑 [تم التصحيح وسحق السطر 126] الاكتفاء بـ user فقط كصمام أمان أزلي ومستقر بعد عزل الحقول الملغاة
+  }, [user]); 
+
+  // ==========================================================================
+  // 📢 [خطاف البث العام] جلب ومزامنة منشورات الفيسبوك التفاعلية حياً من السحاب
+  // ==========================================================================
+  useEffect(() => {
+    if (isLogged) {
+      // 1️⃣ جلب فوري لكافة المنشورات المخزنة في الـ MongoDB Atlas فور فتح المنصة
+      axios.get(`${API_BASE}/api/posts/all`)
+        .then(res => {
+          if (res.data) setFacebookPosts(res.data);
+        })
+        .catch(() => {});
+
+      // 2️⃣ استقبال وعرض المنشورات الجديدة لحظياً فور النشر
+      socket.on('new_facebook_post', (post) => {
+        if (post) setFacebookPosts(prev => [post, ...prev]);
+      });
+
+      // 3️⃣ تحديث التفاعلات (اللايكات والتعليقات) صامتاً ولحظياً لجميع المتصفحات
+      socket.on('facebook_post_updated', (updatedPost) => {
+        if (updatedPost) {
+          setFacebookPosts(prev => prev.map(p => p.id === updatedPost.id ? updatedPost : p));
+        }
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('new_facebook_post');
+        socket.off('facebook_post_updated');
+      }
+    };
+  }, [isLogged]); // خطاف مستقل محمي تماماً من التداخل لمنع الـ Infinite Loop القاتل لـ The HONOR
+
 
   // يوضع داخل الـ useEffect الرئيسي لاستقبال ومزامنة المنشورات حياً
 axios.get(`${API_BASE}/api/posts/all`).then(res => setFacebookPosts(res.data || []));
