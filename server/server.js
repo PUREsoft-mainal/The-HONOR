@@ -137,6 +137,44 @@ app.get('/api/feeds/all', async (req, res) => {
     }
 });
 
+// 👍 مسار API مباشر للتفاعل باللايكات (بديل السوكيت الحامي من الحظر)
+app.post('/api/feeds/like', async (req, res) => {
+    try {
+        const { feedId, username } = req.body;
+        const feed = await GlobalFeedModel.findOne({ id: feedId });
+        if (!feed) return res.status(404).json({ success: false, message: "المنشور غير موجود" });
+
+        if (feed.likes.includes(username)) {
+            feed.likes = feed.likes.filter(u => u !== username); // إلغاء اللايك
+        } else {
+            feed.likes.push(username); // وضع لايك
+        }
+        await feed.save();
+        return res.json({ success: true, feed });
+    } catch (err) { 
+        return res.status(500).json({ success: false, error: err.message }); 
+    }
+});
+
+// 💬 مسار API مباشر لضخ تعليق جديد (بديل السوكيت الحامي من الحظر)
+app.post('/api/feeds/comment', async (req, res) => {
+    try {
+        const { feedId, username, text } = req.body;
+        const feed = await GlobalFeedModel.findOne({ id: feedId });
+        if (!feed) return res.status(404).json({ success: false, message: "المنشور غير موجود" });
+
+        feed.comments.push({
+            user: username,
+            text: text,
+            time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+        });
+        await feed.save();
+        return res.json({ success: true, feed });
+    } catch (err) { 
+        return res.status(500).json({ success: false, error: err.message }); 
+    }
+});
+
 
 // 👑 معيار حفظ الإعلانات الثنائية الموقوتة والموجهة بـ MongoDB
 const AdSchema = new mongoose.Schema({
