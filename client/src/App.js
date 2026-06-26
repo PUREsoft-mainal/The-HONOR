@@ -326,9 +326,6 @@ socket.on('facebook_post_updated', (updatedPost) => {
 
         </div>
 
-
-        </div>
-
         {/* 6. شريط الإعلانات السفلي التفاعلي المربوط بالأعضاء */}
         <div style={{ padding: '0 20px', width: '100%', boxSizing: 'border-box', marginTop: '15px', marginBottom: '15px' }}>
           <AdSliderBottom ads={ads} user={user} />
