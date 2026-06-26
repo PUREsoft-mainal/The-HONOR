@@ -105,16 +105,6 @@ function App() {
         setPassword("");
       });
 
-      // مستمع تحديث وتأمين هيكل غرف المشرفين والصلاحيات
-      socket.on('update_groups_list', (updatedGroups) => {
-        if (!updatedGroups) return;
-        setGroups(updatedGroups);
-        setCurrentGroup(prevGroup => {
-          const currentUpdate = updatedGroups.find(g => g.id === prevGroup.id);
-          return currentUpdate ? currentUpdate : prevGroup;
-        });
-      });
-
       // مستمع استقبال جلب وضخ تحديثات الإعلانات اللحظية الحية للأشرطة المزدوجة
       socket.on('update_ads', (data) => {
         if (data) setAds(data);
@@ -126,14 +116,9 @@ function App() {
 
     return () => {
       if (socket) {
-        socket.off('group_message');
-        socket.off('message');
-        socket.off('admin_receive_teacher_request');
-        socket.off('admin_receive_api_key_request');
         socket.off('init_data');
         socket.off('update_stats');
         socket.off('register_success');
-        socket.off('update_groups_list');
         socket.off('update_ads');
         socket.off('error_msg');
       }
