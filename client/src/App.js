@@ -48,6 +48,40 @@ function App() {
   const [newPost, setNewPost] = useState({ description: '', price: '', files: [] });
   const [showAdsManagerModal, setShowAdsManagerModal] = useState(false); // كبسولة فتح لوحة الإعلانات
   const [facebookPosts, setFacebookPosts] = useState([]);
+
+    // ==========================================================================
+  // 📢 [خطاف البث العام المحدث] جلب ومزامنة منشورات الـ Feed بنقاء دون تداخل
+  // ==========================================================================
+  useEffect(() => {
+    if (isLogged) {
+      // 1️⃣ جلب فوري لكافة منشورات البث من المسار الجديد للـ Feed
+      axios.get(`${API_BASE}/api/feeds/all`)
+        .then(res => {
+          if (res.data) setFacebookPosts(res.data);
+        })
+        .catch(() => {});
+
+      // 2️⃣ استقبال منشورات البث العامة الجديدة لحظياً
+      socket.on('new_facebook_feed', (feed) => {
+        if (feed) setFacebookPosts(prev => [feed, ...prev]);
+      });
+
+      // 3️⃣ تحديث التفاعلات واللايكات صامتاً ولحظياً لجميع المشتركين لـ The HONOR
+      socket.on('facebook_feed_updated', (updatedFeed) => {
+        if (updatedFeed) {
+          setFacebookPosts(prev => prev.map(f => f.id === updatedFeed.id ? updatedFeed : f));
+        }
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('new_facebook_feed');
+        socket.off('facebook_feed_updated');
+      }
+    };
+  }, [isLogged]); 
+
   
   // 👑 المزامنة الحية الصافية واستقبال قنوات بث المتجر لحظياً في السحاب لـ The HONOR
   useEffect(() => {
