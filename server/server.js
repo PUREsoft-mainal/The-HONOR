@@ -143,6 +143,9 @@ const AdSchema = new mongoose.Schema({
 });
 const AdModel = mongoose.model('Ad', AdSchema);
 
+// 🌐 تفعيل المسار الساكن لمجلد الرفع ليكون مسار الاستدعاء هو نفس مسار الحفظ تماماً
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // ==========================================================================
 // 🕋 [صمام الأمان البنكي للكعبة] حقن المسارين تبادلياً لإبادة الـ 404 كلياً فالسحاب
 // ==========================================================================
@@ -170,6 +173,61 @@ app.post('/api/prayer/upload-adhan', upload.single('adhanAudio'), async (req, re
         res.status(500).json({ success: false, error: err.message }); 
     }
 });
+
+// 👑 بناء السكيمة السحابية للمنشورات بداخل MongoDB Atlas لـ The HONOR
+const PostSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    author: { type: String, required: true },
+    text: { type: String, default: '' },
+    image: { type: String, default: '' },
+    likes: { type: [String], default: [] }, 
+    comments: [{
+        user: String,
+        text: String,
+        time: String
+    }],
+    time: { type: String, required: true }
+});
+const PostModel = mongoose.models.Post || mongoose.model('Post', PostSchema);
+
+// 🚀 مسار رفع وحفظ المنشورات التفاعلية حياً بالسحاب
+app.post('/api/posts/create', upload.single('postImage'), async (req, res) => {
+    try {
+        const { author, text } = req.body;
+        if (!author) return res.status(400).json({ success: false, message: "⚠️ بيانات الناشر مفقودة" });
+
+        const newPost = new PostModel({
+            id: 'post_' + Date.now().toString(),
+            author: author.trim(),
+            text: text || '',
+            // حفظ مسار الصورة الصافي ليكون متطابقاً مع مسار الاستدعاء الساكن
+            image: req.file ? `/uploads/${req.file.filename}` : '',
+            time: new Date().toLocaleString('ar-EG', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+        });
+
+        await newPost.save();
+        
+        // بث فوري للمنشور حياً لجميع المتصلين عبر السوكيت العالمي
+        if (global.io) {
+            global.io.emit('new_facebook_post', newPost); 
+        }
+
+        return res.json({ success: true, post: newPost });
+    } catch (err) { 
+        return res.status(500).json({ success: false, error: err.message }); 
+    }
+});
+
+// ⏳ مسار جلب كافة المنشورات المؤرشفة فور فتح المنصة
+app.get('/api/posts/all', async (req, res) => {
+    try {
+        const allPosts = await PostModel.find({}).sort({ _id: -1 }); // الأحدث بالأعلى دائماً
+        return res.json(allPosts);
+    } catch (err) { 
+        return res.json([]); 
+    }
+});
+
 
 // ==========================================
 // 🧠 [محرك الذكاء الاصطناعي السحابي للمنصة]
