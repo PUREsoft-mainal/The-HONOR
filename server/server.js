@@ -14,7 +14,7 @@ const server = http.createServer(app);
 // 🌐 إعداد كائن الـ Socket.io المطور والمؤمن سيبرانياً لـ The HONOR
 const io = new Server(server, {
     cors: {
-        origin: ["https://vercel.app", "https://hf.space"],
+        origin: ["https://ouro-steps.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
         methods: ["GET", "POST"],
         credentials: true 
     },
