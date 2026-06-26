@@ -34,8 +34,6 @@ function App() {
   const [user, setUser] = useState({ username: '', role: '', user_id: '' });
   const [isSignUp, setIsSignUp] = useState(false);
   const [password, setPassword] = useState("");
-  const [chat, setChat] = useState([]);
-  const [msg, setMsg] = useState("");
   const [files, setFiles] = useState([]);
   const [ads, setAds] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -44,15 +42,10 @@ function App() {
   const [discoveryTab, setDiscoveryTab] = useState('friends');
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentGroup, setCurrentGroup] = useState({ id: 'public', name: 'المجموعة العامة' });
-  const [groups, setGroups] = useState([{ id: 'public', name: 'المجموعة العامة' }]);
   const [showPrayerModal, setShowPrayerModal] = useState(false); 
   const [showMarket, setShowMarket] = useState(false); 
   const [marketPosts, setMarketPosts] = useState([]);
-  const [pendingCenterRequests, setPendingCenterRequests] = useState([]);
-  const [pendingApiRequests, setPendingApiRequests] = useState([]);
   const [showAdminPanelModal, setShowAdminPanelModal] = useState(false); 
-  const [companyRequests, setCompanyRequests] = useState([]); 
   const [newPost, setNewPost] = useState({ description: '', price: '', files: [] });
   const [showAdsManagerModal, setShowAdsManagerModal] = useState(false); // كبسولة فتح لوحة الإعلانات
   const [facebookPosts, setFacebookPosts] = useState([]);
