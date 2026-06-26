@@ -344,55 +344,6 @@ socket.on('facebook_post_updated', (updatedPost) => {
           <AdSliderBottom ads={ads} user={user} />
         </div>
 
-        {/* ⚙️ لوحة الأدمن الملكية الشاملة والموحدة للطلبات والتصاريح المعقمة لـ The HONOR */}
-        {showAdminPanelModal && (
-          <div className="discovery-overlay" onClick={() => setShowAdminPanelModal(false)}>
-            <div className="discovery-window gold-border" onClick={e => e.stopPropagation()} style={{ width: '92%', maxWidth: '600px', background: '#070707', padding: '20px', borderRadius: '12px' }}>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #c0392b', paddingBottom: '10px' }}>
-                <h3 style={{ color: '#c0392b', margin: 0, fontSize: '15px', fontWeight: 'bold' }}>👑 غرف تحكم الإدارة العليا - الأدمن Mostafa</h3>
-                <button className="close-discovery" onClick={() => setShowAdminPanelModal(false)}>×</button>
-              </div>
-
-              <div className="discovery-body scrollbar-gold" style={{ maxHeight: '60vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                
-                {/* 📋 أ) عرض طلبات الشركات والمصانع السنوية الموقوتة */}
-                {companyRequests && companyRequests.length > 0 && (
-                  <div style={{ background: 'rgba(41,128,185,0.05)', padding: '12px', borderRadius: '8px', border: '1px solid #2980b9' }}>
-                    <small style={{ color: '#2980b9', display: 'block', fontWeight: 'bold', marginBottom: '6px' }}>🏛️ طلبات تفعيل أنظمة الشركات والمصانع المعلقة:</small>
-                    {companyRequests.map(r => (
-                      <div key={r.requestId} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#000', padding: '8px 12px', borderRadius: '4px', marginBottom: '5px' }}>
-                        <span style={{ color: '#fff', fontSize: '11px' }}>👤 يطلب المستثمر <strong style={{color:'#2980b9'}}>{r.applicant}</strong> فتح نظام المصانع السنوي</span>
-                        <button className="gold-btn-small" style={{ background: '#27ae60', border: 'none', color: '#fff', padding: '4px 12px', cursor: 'pointer', borderRadius: '4px', fontWeight: 'bold', fontSize: '10px' }} onClick={() => { if (socket) { socket.emit('admin_approve_company_system', { requestId: r.requestId, applicantName: r.applicant }); setCompanyRequests(prev => prev.filter(req => req.requestId !== r.requestId)); alert(`🏛️ تم قبول طلب المستثمر (${r.applicant}) وتفعيل نظام الشركات بنجاح!`); } }} >موافق (سنة كاملة) ✔️</button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {(!companyRequests || companyRequests.length === 0) && (
-                  <p style={{ color: 'var(--text-muted)', fontSize: '11px', textAlign: 'center', margin: '2px 0' }}>📋 لا توجد طلبات شركات معلقة حالياً...</p>
-                )}
-
-                {/* 🏫 ب) عرض طلبات السناتر والاجتماعات الموقوتة لـ 30 يوماً بالمنصة */}
-                {pendingCenterRequests && pendingCenterRequests.length > 0 && (
-                  <div style={{ background: 'rgba(212,175,55,0.05)', padding: '12px', borderRadius: '8px', border: '1px solid var(--gold-primary)', marginTop: '5px' }}>
-                    <small style={{ color: 'var(--gold-primary)', display: 'block', fontWeight: 'bold', marginBottom: '6px' }}>🏫 طلبات فتح السناتر المعلقة (30 يوماً):</small>
-                    {pendingCenterRequests.map(r => (
-                      <div key={r.requestId} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#000', padding: '8px 12px', borderRadius: '4px', marginBottom: '5px' }}>
-                        <span style={{ color: '#fff', fontSize: '11px' }}>👤 يطلب المستخدم <strong style={{color:'var(--gold-primary)'}}>{r.applicant}</strong> فتح سنتر خاص به للتدريس</span>
-                        <button className="gold-btn-small" style={{ background: '#27ae60', border: 'none', color: '#fff', padding: '4px 12px', cursor: 'pointer', borderRadius: '4px', fontWeight: 'bold', fontSize: '10px' }} onClick={() => { if (socket) { socket.emit('admin_approve_teacher_request', { requestId: r.requestId }); setPendingCenterRequests(prev => prev.filter(req => req.requestId !== r.requestId)); alert("👑 تم تفعيل ترخيص السنتر والاجتماعات بنجاح لمدة 30 يوماً!"); } }} >موافق (30 يوماً) ✔️</button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {(!pendingCenterRequests || pendingCenterRequests.length === 0) && (
-                  <p style={{ color: 'var(--text-muted)', fontSize: '11px', textAlign: 'center', margin: '2px 0' }}>🏫 لا توجد طلبات سناتر معلقة حالياً...</p>
-                )}
-
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* ========================================================================== */}
         {/* 📢 لوحة إدارة الإعلانات التفاعلية الموقوتة والموجهة للأدمن - لـ The HONOR */}
         {/* ========================================================================== */}
