@@ -71,7 +71,7 @@ mongoose.connect(mongoURI)
 
 app.use(express.json()); // تفعيل قراءة الـ JSON Payload
 app.use(cors({
-    origin: ["https://ouro-steps.vercel.app", "https://puresoft-mainal-ouro-steps.hf.space"],
+    origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
     credentials: true,
     methods: ["GET", "POST", "DELETE"]
 }));
