@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
+const FeedSection = ({ posts, setPosts, user, apiBase }) => {
   const [feedText, setFeedText] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [commentInputs, setCommentInputs] = useState({});
@@ -20,14 +20,40 @@ const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
       if (res.data.success) {
         setFeedText("");
         setSelectedFile(null);
+        // إنعاش وإعادة جلب البث فوراً لرؤية المنشور الجديد حياً
+        const refresh = await axios.get(`${apiBase}/api/feeds/all`);
+        setPosts(refresh.data || []);
       }
     } catch (err) { console.error("خطأ إنشاء البث العام:", err); }
+  };
+
+  const handleLike = async (feedId) => {
+    try {
+      const res = await axios.post(`${apiBase}/api/feeds/like`, { feedId, username: user.username });
+      if (res.data.success) {
+        // تحديث الكارت المستهدف فقط في الواجهة فوراً وبسلاسة
+        setPosts(prev => prev.map(p => p.id === feedId ? res.data.feed : p));
+      }
+    } catch (err) { console.error("خطأ اللايك:", err); }
+  };
+
+  const handleCommentSubmit = async (feedId) => {
+    const text = commentInputs[feedId];
+    if (!text || !text.trim()) return;
+
+    try {
+      const res = await axios.post(`${apiBase}/api/feeds/comment`, { feedId, username: user.username, text });
+      if (res.data.success) {
+        setPosts(prev => prev.map(p => p.id === feedId ? res.data.feed : p));
+        setCommentInputs({ ...commentInputs, [feedId]: '' }); // تصفير الحقل
+      }
+    } catch (err) { console.error("خطأ التعليق:", err); }
   };
 
   return (
     <div className="facebook-feed-zone" style={{ width: '100%', maxWidth: '680px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '15px', padding: '10px' }}>
       
-      {/* 📝 صندوق إنشاء منشور بث عام جديد بخلفية شفافة */}
+      {/* صندوق إنشاء منشور بث عام جديد بخلفية شفافة */}
       <form onSubmit={handleFeedSubmit} style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '15px', borderRadius: '12px' }}>
         <textarea 
           value={feedText}
@@ -45,7 +71,7 @@ const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
         </div>
       </form>
 
-      {/* 🎰 عرض كروت المنشورات بخلفية شفافة تماماً */}
+      {/* عرض كروت المنشورات بخلفية شفافة تماماً لـ The HONOR */}
       {posts.map(feed => (
         <div key={feed.id} style={{ background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.05)', padding: '15px', borderRadius: '12px', color: '#fff', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           
@@ -58,9 +84,9 @@ const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
           
           {feed.image && <img src={`${apiBase}${feed.image}`} alt="Feed Attach" style={{ width: '100%', maxHeight: '350px', objectFit: 'cover', borderRadius: '8px', marginTop: '5px' }} />}
 
-          {/* أشرطة التفاعل باللايكات والتعليقات المنفصلة */}
+          {/* أشرطة التفاعل باللايكات والتعليقات المباشرة المحمية من حظر السحاب */}
           <div style={{ display: 'flex', gap: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '8px 0', fontSize: '12px' }}>
-            <span style={{ cursor: 'pointer', color: feed.likes?.includes(user.username) ? '#3498db' : '#fff', fontWeight: 'bold' }} onClick={() => socket.emit('like_facebook_feed', { feedId: feed.id, username: user.username })}>
+            <span style={{ cursor: 'pointer', color: feed.likes?.includes(user.username) ? '#3498db' : '#fff', fontWeight: 'bold' }} onClick={() => handleLike(feed.id)}>
               👍 {feed.likes?.length || 0} إعجاب
             </span>
             <span style={{ color: 'rgba(255,255,255,0.6)' }}>💬 {feed.comments?.length || 0} تعليق</span>
@@ -75,7 +101,7 @@ const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
             ))}
           </div>
 
-          {/* حقل إدخال تعليق جديد وعبر السوكيت */}
+          {/* حقل إدخال تعليق جديد ومباشر */}
           <div style={{ display: 'flex', gap: '5px' }}>
             <input 
               type="text"
@@ -83,13 +109,16 @@ const FeedSection = ({ posts, setPosts, user, socket, apiBase }) => {
               value={commentInputs[feed.id] || ''}
               onChange={(e) => setCommentInputs({ ...commentInputs, [feed.id]: e.target.value })}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && commentInputs[feed.id]?.trim()) {
-                  socket.emit('comment_facebook_feed', { feedId: feed.id, username: user.username, text: commentInputs[feed.id] });
-                  setCommentInputs({ ...commentInputs, [feed.id]: '' });
-                }
+                if (e.key === 'Enter') handleCommentSubmit(feed.id);
               }}
               style={{ flex: 1, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 10px', borderRadius: '6px', color: '#fff', fontSize: '12px', outline: 'none' }}
             />
+            <button 
+              onClick={() => handleCommentSubmit(feed.id)}
+              style={{ background: 'transparent', color: 'var(--gold-primary)', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+            >
+              تعليق
+            </button>
           </div>
 
         </div>
