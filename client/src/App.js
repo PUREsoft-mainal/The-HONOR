@@ -7,7 +7,6 @@ import Header from './components/Header';
 import AdSlider from './components/AdSlider'; 
 import ActionBar from './components/ActionBar'; 
 import GroupsSidebar from './components/GroupsSidebar';
-import UploadSidebar from './components/UploadSidebar';
 import LoginBox from './components/LoginBox';
 import PrayerWidget from './components/PrayerWidget'; 
 import AdSliderBottom from './components/AdSliderBottom';
@@ -304,13 +303,6 @@ socket.on('facebook_post_updated', (updatedPost) => {
 
 
         <div className="main-content">
-
-          <UploadSidebar 
-            files={files} 
-            serverUrl={API_BASE} 
-            onUpload={handleFileUpload} 
-            user={user} 
-          />
           
         </div> 
         {/* 👑 [تم التطهير كلياً] حذف السطر النصي وتأمين تشغيل المتجر المستقل لـ The HONOR */}
