@@ -97,73 +97,6 @@ function App() {
   // 👑 المنظومة المركزية الشاملة والموحدة لإدارة أحداث السوكت والبث الحي والرسائل
   useEffect(() => {
     if (socket) {
-      // مستمع استقبال وحفظ رسائل المجموعات اللحظي المصفى
-      socket.on('group_message', (data) => {
-        if (data && data.roomId === currentGroup.id) {
-          const cleanMsg = {
-            ...data.msg,
-            text: typeof data.msg.text === 'object' && data.msg.text !== null ? data.msg.text.text : data.msg.text
-          };
-          setChat(prev => [...prev, cleanMsg]);
-        }
-      });
-
-      // مستمع استقبال رسائل المحادثات العامة والنظام التاريخية
-      socket.on('message', (m) => {
-        if (m) setChat(prev => [...prev, m]);
-      });
-
-      // فحص اسم حساب الأدمن ورقم تعريفه الشخصي الصارم قبل عرض طلب المعلمين
-      socket.on('admin_receive_teacher_request', (req) => {
-        if (!req) return;
-        const isCurrentMeTheTrueAdmin = user && 
-                                        user.username === 'Admin_Mostafa' && 
-                                        (user._id === req.targetAdminId || user.user_id === req.targetAdminId);
-
-        if (isCurrentMeTheTrueAdmin) {
-          setPendingCenterRequests(prev => {
-            if (prev.some(p => p.requestId === req.requestId)) return prev;
-            return [...prev, req];
-          });
-          console.log("👑 [Sovereign UI Catch] تم قنص وتثبيت طلب اشتراك موجه لهويتك الملكية حياً!");
-        }
-      });
-
-      // مستمع التقاط طلبات مفاتيح الـ API بالمزايا المختارة حياً على شاشة الأدمن
-      socket.on('admin_receive_api_key_request', (req) => {
-        if (!req) return;
-        setPendingApiRequests(prev => {
-          if (prev.some(p => p.keyId === req.keyId)) return prev;
-          return [...prev, req];
-        });
-      });
-      // مستمع المزامنة التاريخية وتأمين بيانات الدخول والتصاريح الإدارية المطهرة من المحافظ
-      socket.on('init_data', (data) => { 
-        if (data && data.user) {
-          setAds(data.ads || []); 
-          
-          const sanitizedHistory = (data.chatHistory || []).map(m => ({
-            ...m,
-            text: typeof m.text === 'object' && m.text !== null ? (m.text.text || JSON.stringify(m.text)) : m.text
-          }));
-          
-          setChat(sanitizedHistory); 
-          setUser(data.user); 
-          if (data.groups) setGroups(data.groups); 
-          if (data.stats) { 
-              setTotalUsers(data.stats.totalUsers || 0); 
-              setActiveUsers(data.stats.activeUsers || 0); 
-          }
-          setIsLogged(true); 
-          
-          if (data.usersList && typeof setAllUsers === 'function') {
-              setAllUsers(data.usersList);
-          }
-          if (typeof setLoading === 'function') {
-              setLoading(false); 
-          }
-        }
-      });
 
       // مستمع بث وتحديث الإحصائيات الفورية لعدد المتصلين والمسجلين بالمنصة
       socket.on('update_stats', (data) => { 
@@ -378,51 +311,6 @@ socket.on('facebook_post_updated', (updatedPost) => {
 
 
         <div className="main-content">
-          
-
-          {/* المنتصف: منطقة الدردشة واستقبال وعرض رسائل الغرفة الحالية المأمنة لـ The HONOR */}
-          <div className="chat-area-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px' }}>
-            <div className="chat-header" style={{ color: 'var(--gold-primary)', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '5px', marginBottom: '10px' }}>
-              💬 {currentGroup.name || 'المجموعة العامة'}
-            </div>
-            
-            <div className="chat-messages" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {chat.map((m, index) => (
-                <div key={index} className={`message-bubble ${m.user === user.username ? 'my-msg' : 'other-msg'}`} style={{ alignSelf: m.user === user.username ? 'flex-end' : 'flex-start', background: m.user === user.username ? '#1e3d59' : '#17b978', padding: '6px 12px', borderRadius: '8px', color: '#fff', maxWidth: '70%' }}>
-                  <small style={{ display: 'block', fontSize: '10px', color: '#f5f5f5', fontWeight: 'bold' }}>{m.user} ({m.role})</small>
-                  <span>{m.text}</span>
-                  <span style={{ display: 'block', fontSize: '9px', textAlign: 'left', marginTop: '2px', color: '#e0e0e0' }}>{m.time}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="chat-input-wrapper" style={{ display: 'flex', gap: '5px', marginTop: '10px' }}>
-              <input 
-                type="text" 
-                value={msg} 
-                onChange={(e) => setMsg(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && msg.trim()) {
-                    socket.emit('sendMessage', msg);
-                    setMsg("");
-                  }
-                }}
-                placeholder="اكتب رسالتك الملكية هنا..." 
-                style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', background: '#222', color: '#fff' }}
-              />
-              <button 
-                onClick={() => {
-                  if (msg.trim()) {
-                    socket.emit('sendMessage', msg);
-                    setMsg("");
-                  }
-                }}
-                style={{ background: 'var(--gold-primary)', color: '#000', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                إرسال
-              </button>
-            </div>
-          </div>
 
           <UploadSidebar 
             files={files} 
