@@ -9,9 +9,15 @@ const ActionBar = ({
   setShowPrayerModal, 
   setShowMarket, 
   friendRequestsCount, 
+  setShowApiKeyModal, 
+  setShowCenterModal, 
   setShowAdminPanelModal, 
+  setShowFlashModal,
+  setShowWalletModal,
+  setShowInvoiceModal,
+  setShowCompanyModal,
   setShowDocEngineModal, // 👑 استقبال شريان تفعيل محرك المستندات
-  setShowAdsManagerModal  // 👑 [تم الحقن] شريان فتح لوحة إدارة الإعلانات التفاعلية الحية
+  setShowAiModal // 👈 👑 حقن دالة الـ AI الجديدة هنا
 }) => {
 
   // 👑 مراجع ومحركات التحريك والتمرير الأفقي لشريط الأزرار الملكي بسلاسة
@@ -48,7 +54,12 @@ const ActionBar = ({
         style={{ flex: 1, display: 'flex', gap: '8px', overflowX: 'auto', scrollBehavior: 'smooth', padding: '5px 10px', whiteSpace: 'nowrap', WebkitOverflowScrolling: 'touch' }}
       >
         
+        {/* 👑 رص الأزرار بمساحتهم الحرة دون نزول في الأسطر */}
+        <button type="button" className="action-bar-btn" onClick={() => setShowWalletModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>🪙 المحفظة الرقمية</button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowInvoiceModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#27ae60' }}>🧾 محرك الفواتير</button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowCompanyModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#2980b9' }}>🏛️ إدارة الشركات</button>
         <button type="button" className="action-bar-btn" onClick={() => setShowDocEngineModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#e67e22' }}>📝 منشئ المستندات</button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowCenterModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: 'var(--gold-primary)' }}>🏫 قاعة السنتر</button>
         {/* 🕋 👑 [إضافة وحقن زر مواقيت الصلاة المستقل والشرعي] لفتح ملف PrayerWidget.js */}
         <button 
           type="button" 
@@ -59,17 +70,26 @@ const ActionBar = ({
           🕋 مواقيت الصلاة
         </button>
 
-        <button type="button" className="action-bar-btn" onClick={() => setShowMarket(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>🛒 المتجر المفتوح</button>  
-        {/* 📢 👑 [تم الحقن والحسم] زر إدارة الإعلانات التفاعلية الحية يظهر حصرياً للأدمن Mostafa داخل شريط التمرير */}
+        {/* 🤖 الزر السيادي المطور لإطلاق المساعد الذكي المدفوع لـ جوجل Gemini */}
+        <button 
+          type="button" 
+          className="action-bar-btn"
+          onClick={() => { if (typeof setShowAiModal === 'function') setShowAiModal(true); }}
+          style={{ borderColor: '#9b59b6', color: '#fff' }}
+        >
+          AI
+        </button>
+
+
+        {/* أزرار الخدمات التفاعلية المدمجة مسبقاً بمنصتك */}
+        <button type="button" className="action-bar-btn" onClick={() => { setShowDiscovery(true); setDiscoveryTab('prayer'); }} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>الأصدقاء</button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowMarket(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>🛒 المتجر المفتوح</button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowFlashModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}> الفلاشة </button>
+        <button type="button" className="action-bar-btn" onClick={() => setShowApiKeyModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap' }}>🔑 API Key</button>
+        
+        {/* زر لوحة تحكم الأدمن لسيادتك Mostafa لرصد الموافقات */}
         {isAdmin && (
-          <button 
-            type="button" 
-            className="action-bar-btn admin-special-btn" 
-            onClick={() => { if (typeof setShowAdsManagerModal === 'function') setShowAdsManagerModal(true); }} 
-            style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#27ae60', color: '#27ae60', fontWeight: 'bold' }}
-          >
-            📢 إدارة الإعلانات
-          </button>
+          <button type="button" className="action-bar-btn" onClick={() => setShowAdminPanelModal(true)} style={{ flex: '0 0 auto', minWidth: '130px', whiteSpace: 'nowrap', borderColor: '#c0392b', color: '#c0392b', fontWeight: 'bold' }}>⚙️ طلبات الإدارة</button>
         )}
 
       </div>

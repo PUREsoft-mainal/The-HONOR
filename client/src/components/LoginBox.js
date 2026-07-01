@@ -6,40 +6,13 @@ const LoginBox = ({ isSignUp, setIsSignUp, user, setUser, password, setPassword,
   // دالة وسيطة للتأكد من أن الضغط يعمل واختبار المدخلات محلياً
   const onFormSubmit = (e) => {
     e.preventDefault();
-    const cleanUsername = user?.username?.trim();
-
-    console.log("🚀 تم الضغط على زر الدخول لـ The HONOR! المستخدم المستهدف:", cleanUsername);
-
-    // 👑 [صمام فتح اضطراري وسريع]: لتجاوز حظر الـ 404 السحابي على Hugging Face فوراً
-    if (!isSignUp && cleanUsername === 'Admin_Mostafa' && password === '123') {
-      console.log("🛡️ تم تفعيل جدار الاختراق الإداري! فتح الواجهة الإدارية الملكية مباشرة...");
-      
-      // التمرير والفتح القسري المباشر للواجهة دون انتظار قنوات السوكيت المعرقلة
-      if (typeof handleAction === 'function') {
-        handleAction(e);
-      }
-      return; // كسر وتخطي أي عوائق تشغيلية
-    }
-
-    // للمستخدمين العاديين، يستمر المسار الطبيعي
-    handleAction(e); 
+    console.log("🚀 تم الضغط على زر الدخول المحلي! البيانات المستهدفة:", user.username);
+    handleAction(e); // استدعاء الدالة الأصلية من App.js لتوجيه إشارة السوكيت المحلي
   };
 
   return (
     <div className="login-box-wrapper">
-      {/* 👑 [تأمين وتصحيح مسار اللوجو]: استدعاء مباشر من مجلد الأصول العام مأمن من الـ Crash لـ The HONOR */}
-      <img 
-        src="/assets/logo.png" 
-        className="main-logo" 
-        alt="The HONOR Logo" 
-        style={{ width: '320px', height: 'auto', display: 'block', margin: '0 auto 20px' }} 
-        onError={(e) => {
-          e.target.style.display = 'none';
-          console.log("⚠️ تنبيه: ملف logo.png غير موجود في مجلد public/assets/");
-        }}
-      />      
-      
-      <h2 className="login-title">{isSignUp ? "إنشاء حساب ملكي جديد" : "دخول منصة The HONOR"}</h2>
+    <img src={`${process.env.PUBLIC_URL}/assets/logo.png`} className="main-logo" alt="OURO" style={{ width: '320px', height: 'auto', display: 'block', margin: '0 auto 20px' }} />      <h2 className="login-title">{isSignUp ? "إنشاء حساب ملكي جديد" : "دخول المنصة المحلية"}</h2>
       
       <form onSubmit={onFormSubmit}>
         <div className="login-fields-container">
@@ -64,7 +37,7 @@ const LoginBox = ({ isSignUp, setIsSignUp, user, setUser, password, setPassword,
                 onChange={e => setUser({...user, role: e.target.value})} 
                 required
               >
-                <option value="">اختر التخصص الإداري</option>
+                <option value="">اختر التخصص</option>
                 <option value="مبرمج">💻 مبرمج</option>
                 <option value="تاجر">💰 تاجر</option>
                 <option value="مستخدم">✍️ مستخدم عام</option>
@@ -75,16 +48,17 @@ const LoginBox = ({ isSignUp, setIsSignUp, user, setUser, password, setPassword,
               type="submit" 
               className="login-btn"
             >
-              {isSignUp ? "تأكيد التسجيل السحابي" : "دخول آمن للمنصة الملكية"}
+              {isSignUp ? "تأكيد التسجيل المحلي" : "دخول آمن للمنصة"}
             </button>
         </div>
       </form>
 
-      <p onClick={() => setIsSignUp(!isSignUp)} className="login-toggle-text" style={{ cursor: 'pointer', textAlign: 'center', marginTop: '15px' }}>
-        {isSignUp ? "لديك حساب بالفعل؟ سجل دخولك من هنا" : "ليس لديك حساب؟ أنشئ هويتك الملكية الآن"}
+      <p onClick={() => setIsSignUp(!isSignUp)} className="login-toggle-text">
+        {isSignUp ? "لديك حساب بالفعل؟ سجل دخولك من هنا" : "ليس لديك حساب؟ أنشئ هويتك الآن"}
       </p>
     </div>
   );
 };
 
 export default LoginBox;
+
