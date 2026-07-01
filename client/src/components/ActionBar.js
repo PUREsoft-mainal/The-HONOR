@@ -21,12 +21,12 @@ const ActionBar = ({
 }) => {
 
   // 👑 مراجع ومحركات التحريك والتمرير الأفقي لشريط الأزرار الملكي بسلاسة
-  const ouroScrollRef = useRef(null);
+  const honorScrollRef = useRef(null);
 
-  const scrollOuroBar = (direction) => {
-    if (ouroScrollRef.current) {
+  const scrollHonorBar = (direction) => {
+    if (honorScrollRef.current) {
       const scrollAmount = 180; // المسافة الفيزيائية الحرة للتحريك بالبيكسل مع كل نقرة
-      ouroScrollRef.current.scrollBy({
+      honorScrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
       });
@@ -41,7 +41,7 @@ const ActionBar = ({
       {/* ⬅️ السهم الملكي الأيسر للتحريك والتمرير بنقاء */}
       <button 
         type="button" 
-        onClick={() => scrollOuroBar('left')} 
+        onClick={() => scrollHonorBar('left')} 
         style={{ background: '#000', color: 'var(--gold-primary)', border: '1px solid var(--gold-primary)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10, fontSize: '14px', fontWeight: 'bold', boxShadow: '0 0 8px rgba(212,175,55,0.3)', marginRight: '5px' }}
       >
         ‹
@@ -49,7 +49,7 @@ const ActionBar = ({
 
       {/* 🎰 الحاوية الرئيسية العائمة والمرنة ذات التمرير الأفقي الحر للأزرار */}
       <div 
-        ref={ouroScrollRef} 
+        ref={honorScrollRef} 
         className="action-bar-scroll-wrapper" 
         style={{ flex: 1, display: 'flex', gap: '8px', overflowX: 'auto', scrollBehavior: 'smooth', padding: '5px 10px', whiteSpace: 'nowrap', WebkitOverflowScrolling: 'touch' }}
       >
@@ -97,7 +97,7 @@ const ActionBar = ({
       {/* ➡️ السهم الملكي الأيمن للتحريك والتمرير بنقاء */}
       <button 
         type="button" 
-        onClick={() => scrollOuroBar('right')} 
+        onClick={() => scrollHonorBar('right')} 
         style={{ background: '#000', color: 'var(--gold-primary)', border: '1px solid var(--gold-primary)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10, fontSize: '14px', fontWeight: 'bold', boxShadow: '0 0 8px rgba(212,175,55,0.3)', marginLeft: '5px' }}
       >
         ›
