@@ -16,16 +16,16 @@ import AdSliderBottom from './components/AdSliderBottom';
 import DiscoveryStore from './components/DiscoveryStore';
 import Market from './components/Market'; // استدعاء ملف السوق المستقل الجديد
 import ApiKeyModal from './components/ApiKeyModal';
-import OuroCenterModal from './components/OuroCenterModal';
+import HonorCenterModal from './components/HonorCenterModal';
 import OuroWalletModal from './components/OuroWalletModal'; // 👑 🪙 قُم بحقن هذا السطر السحري هنا فوراً!
-import OuroInvoiceModal from './components/OuroInvoiceModal'; // 👑 قُم بحقن هذا السطر السحري هنا فوراً!
-import OuroCompanyManager from './components/OuroCompanyManager'; // 👑 🏛️ حقن السيستم العملاق للشركات هنا
-import OuroDocEngine from './components/OuroDocEngine'; // 👑 📝 حقن محرك صياغة المستندات والملازم الملكي هنا
-import OuroAiAssistant from './components/OuroAiAssistant'; // 👑 🤖 حقن المساعد الذكي لـ جوجل Gemini هنا بالملي
+import HonorInvoiceModal from './components/HonorInvoiceModal'; // 👑 قُم بحقن هذا السطر السحري هنا فوراً!
+import HonorCompanyManager from './components/HonorCompanyManager'; // 👑 🏛️ حقن السيستم العملاق للشركات هنا
+import HonorDocEngine from './components/HonorDocEngine'; // 👑 📝 حقن محرك صياغة المستندات والملازم الملكي هنا
+import HonorAiAssistant from './components/HonorAiAssistant'; // 👑 🤖 حقن المساعد الذكي لـ جوجل Gemini هنا بالملي
 import './App.css';
 
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
-const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
 // 👑 [تم الحسم والتطهير] تهيئة السوكت النقي والمتوافق مع جدار حماية خوادم Hugging Face
 const socket = io(API_BASE, { 
@@ -674,7 +674,7 @@ return (
 
         {/* 👑 [تفعيل مشروع السنتر المكتسح] إطلاق نافذة السنتر والاجتماعات العائمة بكافة قنوات البث والأزرار الأربعة */}
         {showCenterModal && (
-          <OuroCenterModal 
+          <HonorCenterModal 
             user={user}
             socket={socket}
             API_BASE={API_BASE}
@@ -683,7 +683,7 @@ return (
         )}
 
         {showInvoiceModal && (
-          <OuroInvoiceModal 
+          <HonorInvoiceModal 
             user={user}
             onClose={() => setShowInvoiceModal(false)}
           />
@@ -701,7 +701,7 @@ return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '22px' }}>📟</span>
                   <div style={{ textAlign: 'right' }}>
-                    <h3 style={{ color: '#e67e22', margin: 0, fontSize: '14px', fontWeight: 'bold' }}>منظومة الفلاشة الإلكترونية لـ OURO Core</h3>
+                    <h3 style={{ color: '#e67e22', margin: 0, fontSize: '14px', fontWeight: 'bold' }}>منظومة الفلاشة الإلكترونية لـ HONOR Core</h3>
                     <small style={{ color: '#27ae60', fontSize: '10px', fontFamily: 'monospace' }}>⏱️ التدمير الذكي والتلقائي للملفات بعد 72 ساعة</small>
                   </div>
                 </div>
@@ -738,7 +738,7 @@ return (
         )}
 
         {showCompanyModal && (
-          <OuroCompanyManager 
+          <HonorCompanyManager 
             user={user}
             socket={socket}
             API_BASE={API_BASE}
@@ -747,7 +747,7 @@ return (
         )}
 
         {showDocEngineModal && (
-          <OuroDocEngine 
+          <HonorDocEngine 
             user={user}
             onClose={() => setShowDocEngineModal(false)}
           />
@@ -812,7 +812,7 @@ return (
         )}
 
         {showAiModal && (
-          <OuroAiAssistant 
+          <HonorAiAssistant 
             user={user}
             API_BASE={API_BASE}
             onClose={() => setShowAiModal(false)}
@@ -835,7 +835,7 @@ return (
 
         {/* 👑 [القفل القياسي الصافي] الحاوية السفلية المستقرة بنقاء تام دون أي تكرار */}
         <div className="spacer-wrapper-zone" style={{ padding: '0 20px', width: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '5px' }}> 
-          <div className="disclaimer-bar" style={{ margin: '15px 0 10px 0' }}> 👑 منصة OURO Steps - تجربة ملكية فريدة 2026 </div>
+          <div className="disclaimer-bar" style={{ margin: '15px 0 10px 0' }}> 👑 منصة The HONOR - تجربة ملكية فريدة 2026 </div>
         </div> 
 
       </div> {/* إغلاق app-overlay الشرعي */}
