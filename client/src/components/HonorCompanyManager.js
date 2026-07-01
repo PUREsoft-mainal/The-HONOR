@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const OuroCompanyManager = ({ user, socket, API_BASE, onClose }) => {
+const HonorCompanyManager = ({ user, socket, API_BASE, onClose }) => {
   // 🏛️ أ) حزم وأقفال التراخيص السنوية ومفاتيح ال-API لـ Google Drive
   const [hasLicense, setHasLicense] = useState(false);
   const [licenseExpiry, setLicenseExpiry] = useState("");
@@ -288,4 +288,4 @@ const OuroCompanyManager = ({ user, socket, API_BASE, onClose }) => {
   );
 };
 
-export default OuroCompanyManager; // 👑 القفل القياسي والتصدير الشرعي للمكون بنقاء ثبات فلكي 100%
+export default HonorCompanyManager; // 👑 القفل القياسي والتصدير الشرعي للمكون بنقاء ثبات فلكي 100%
