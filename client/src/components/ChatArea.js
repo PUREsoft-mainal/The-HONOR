@@ -5,7 +5,7 @@ const ChatArea = ({ chat, currentUser, msg, setMsg, socket, currentGroup }) => {
   const messagesEndRef = useRef(null);
   
   // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
-  const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+  const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
   const [activeMenuId, setActiveMenuId] = useState(null); // لتحديد القائمة المفتوحة للرسالة
   const [editingMsgId, setEditingMsgId] = useState(null); // لتحديد الرسالة الجاري تعديلها
@@ -220,7 +220,7 @@ const ChatArea = ({ chat, currentUser, msg, setMsg, socket, currentGroup }) => {
                         type="button" 
                         title={`إضافة ${m.user} للأصدقاء`}
                         onClick={() => {
-                          if (window.confirm(`👥 هل تود إضافة ${m.user} إلى أصدقائك في عالم OURO Steps؟`)) {
+                          if (window.confirm(`👥 هل تود إضافة ${m.user} إلى أصدقائك في عالم The HONOR؟`)) {
                             socket.emit('toggle_friend', { currentUser: currentUser, targetUser: m.user });
                             alert(`🎉 تم إضافة ${m.user} بنجاح!`);
                           }
