@@ -8,7 +8,7 @@ const ApiKeyModal = ({ user, API_BASE, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [keyName, setKeyName] = useState("");
   
-  // 🔒 [تطهير مصفوفة الخصائص] إبادة المحفظة وعملات الـ OURO واعتماد جدار الصلاحيات الإدارية المعلقة
+  // 🔒 [تطهير مصفوفة الخصائص] إبادة المحفظة وعملات الـ HONOR واعتماد جدار الصلاحيات الإدارية المعلقة
   const [scopes, setScopes] = useState({
     all_features: false,   // استخدام API بجميع مزايا المنصة كلياً (بطلب وتصريح الإدارة)
     prayer_times: true,    // مواقيت الصلاة (متاح ومجاني)
@@ -79,7 +79,7 @@ const ApiKeyModal = ({ user, API_BASE, onClose }) => {
       <div className="discovery-window gold-border" onClick={e => e.stopPropagation()} style={{ width: '92%', maxWidth: '750px', background: '#070707' }}>
         
         <div className="discovery-tabs" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ color: 'var(--gold-primary)', margin: 0 }}>⚙️ بوابة مطوري OURO Steps (API Gateway)</h3>
+          <h3 style={{ color: 'var(--gold-primary)', margin: 0 }}>⚙️ بوابة مطوري The HONOR (API Gateway)</h3>
           <button className="close-discovery" onClick={onClose}>❌</button>
         </div>
 
@@ -131,7 +131,7 @@ const ApiKeyModal = ({ user, API_BASE, onClose }) => {
 
             </div>
 
-            {/* 🔒 [تطهير بصري] تم نسف حاوية المبالغ والأسعار لـ OURO شهرياً بالكامل لعزل الطابع المالي */}
+            {/* 🔒 [تطهير بصري] تم نسف حاوية المبالغ والأسعار لـ HONOR شهرياً بالكامل لعزل الطابع المالي */}
             <div style={{ padding: '8px', background: 'rgba(39,174,96,0.05)', borderRadius: '4px', border: '1px solid rgba(39,174,96,0.2)', marginTop: '12px', color: '#27ae60', fontSize: '11px', textAlign: 'center', fontWeight: 'bold' }}>
               🛡️ نظام المطورين محمي ومربوط بالتفويض والموافقة المباشرة من لوحة الإدارة 🔐
             </div>
