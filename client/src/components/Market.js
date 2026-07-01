@@ -6,7 +6,7 @@ const ProductImageSlider = ({ images, apiBase }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const total = images?.length || 0;
 
-  if (total === 0) return <div className="fb-img-wrapper"><img src="/assets/logo.png" alt="Ouro" className="fb-product-img" /></div>;
+  if (total === 0) return <div className="fb-img-wrapper"><img src="/assets/logo.png" alt="Honor" className="fb-product-img" /></div>;
 
   // 👑 [صياغة الرابط السيادي المحمي للتحميل والعرض الحركي طيراناً من حساب الأدمن]
   const driveImgUrl = images[currentIndex].startsWith('/uploads') 
@@ -14,7 +14,7 @@ const ProductImageSlider = ({ images, apiBase }) => {
     : `${apiBase}/api/flash/download/Admin_Mostafa/${images[currentIndex]}`; // سحب الصورة حياً من درايف الأدمن عبر جسر السيرفر
 
   return (
-    <div className="ouro-slider-container" style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '8px', background: '#070707', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '10px' }}>
+    <div className="honor-slider-container" style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '8px', background: '#070707', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '10px' }}>
       <div className="fb-img-wrapper" style={{ cursor: 'pointer', textAlign: 'center', position: 'relative', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => window.open(driveImgUrl, '_blank')}>
         <img src={driveImgUrl} alt="product" className="fb-product-img" style={{ maxWidth: '100%', maxHeight: '350px', objectFit: 'contain' }} />
       </div>
@@ -45,7 +45,7 @@ const Market = ({ user, marketPosts, handleMarketUpload, handleDeletePost, setNe
       <div className="discovery-window gold-border" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '900px' }}>
         
         <div className="discovery-tabs" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ color: 'var(--gold-primary)', margin: 0 }}>🛍️ السوق الملكي الفاخر (OURO Market)</h3>
+          <h3 style={{ color: 'var(--gold-primary)', margin: 0 }}>🛍️ السوق الملكي الفاخر (HONOR Market)</h3>
           <button className="close-discovery" onClick={onClose}>❌ إغلاق</button>
         </div>
 
