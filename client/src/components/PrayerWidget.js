@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../App.css'; 
 
-const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
 const PrayerWidget = ({ socket, user }) => { 
   // صب مواقيت الصلاة لمدينة القاهرة افتراضياً لمنع اختفاء الأرقام وتجميد الـ Grid نهائياً
@@ -149,7 +149,7 @@ const PrayerWidget = ({ socket, user }) => {
             )}
           </div>
 
-          {currentAdhan && <div className="adhan-live-neon">⚡ حان الآن موعد رفع آذان صلاة {currentAdhan} بـ OURO Steps...</div>}
+          {currentAdhan && <div className="adhan-live-neon">⚡ حان الآن موعد رفع آذان صلاة {currentAdhan} بـ The HONOR...</div>}
 
           <div className="prayer-times-grid">
             <div className="prayer-time-card"><span>الفجر</span><strong>{times.fajr}</strong></div>
