@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 
-const OuroInvoiceModal = ({ user, onClose }) => {
+const HonorInvoiceModal = ({ user, onClose }) => {
   // 🔒 states لوحة التحكم بالهوية البصرية والبيانات الحركية للفاتورة وعروض الأسعار
   const [companyName, setCompanyName] = useState(""); // اسم الشركة المصدرة الحرة
   const [companyAddress, setCompanyAddress] = useState(""); // عنوان فرع الشركة الحر
@@ -44,10 +44,10 @@ const OuroInvoiceModal = ({ user, onClose }) => {
   const finalTotal = Math.max(0, subTotal + taxAmount - parseFloat(discount || 0));
   // 🏆 1. خاصية الحفظ كملف PDF الملكية المباشرة للتحميل لجهاز العميل
   const exportToPDF = () => {
-    const element = document.getElementById('ouroPrintedInvoiceZone');
+    const element = document.getElementById('honorPrintedInvoiceZone');
     const opt = {
       margin: 10,
-      filename: `${invoiceType}_${clientName || 'Ouro'}.pdf`,
+      filename: `${invoiceType}_${clientName || 'Honor'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -57,10 +57,10 @@ const OuroInvoiceModal = ({ user, onClose }) => {
 
   // 🏆 2 + 3. خاصية لقطة الشاشة والحفظ كصورة فوتوغرافية واضحة بدقة HD
   const exportToImage = () => {
-    const element = document.getElementById('ouroPrintedInvoiceZone');
+    const element = document.getElementById('honorPrintedInvoiceZone');
     window.html2canvas(element, { scale: 2, backgroundColor: '#000' }).then(canvas => {
       const link = document.createElement('a');
-      link.download = `${invoiceType}_${clientName || 'Ouro'}.png`;
+      link.download = `${invoiceType}_${clientName || 'Honor'}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     });
@@ -68,13 +68,13 @@ const OuroInvoiceModal = ({ user, onClose }) => {
 
   // 🏆 4. خاصية الحفظ كمستند نصي مرن للتداول والتحرير بصيغة Doc (Word)
   const exportToDoc = () => {
-    const element = document.getElementById('ouroPrintedInvoiceZone');
+    const element = document.getElementById('honorPrintedInvoiceZone');
     const htmlContent = element.innerHTML;
     const blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${invoiceType}_${clientName || 'Ouro'}.doc`;
+    a.download = `${invoiceType}_${clientName || 'Honor'}.doc`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -82,7 +82,7 @@ const OuroInvoiceModal = ({ user, onClose }) => {
 
   // 🏆 5. خاصية الطباعة الفورية الصافية عبر طابعات الكمبيوتر أو الهواتف الذكية
   const handlePrint = () => {
-    const printContent = document.getElementById('ouroPrintedInvoiceZone').innerHTML;
+    const printContent = document.getElementById('honorPrintedInvoiceZone').innerHTML;
     const originalContent = document.body.innerHTML;
     
     document.body.innerHTML = `
@@ -112,8 +112,8 @@ const OuroInvoiceModal = ({ user, onClose }) => {
 
             {/* زر رفع اللوجو وحفظه سحابياً طيراناً دون استهلاك مساحة */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input type="file" id="ouroInvoiceLogoInput" accept="image/*" hidden onChange={handleLogoChange} />
-              <button type="button" onClick={() => document.getElementById('ouroInvoiceLogoInput').click()} style={{ background: '#e67e22', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>📸 اختيار شعار / لوجو الشركة</button>
+              <input type="file" id="honorInvoiceLogoInput" accept="image/*" hidden onChange={handleLogoChange} />
+              <button type="button" onClick={() => document.getElementById('honorInvoiceLogoInput').click()} style={{ background: '#e67e22', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>📸 اختيار شعار / لوجو الشركة</button>
               {companyLogo && <small style={{ color: '#27ae60', fontSize: '10px' }}>✔️ تم قنص وتثبيت الشعار بنجاح</small>}
             </div>
           </div>
@@ -155,13 +155,13 @@ const OuroInvoiceModal = ({ user, onClose }) => {
             <button type="button" onClick={onClose} style={{ gridColumn: '1 / -1', background: '#333', color: '#fff', padding: '6px', border: 'none', borderRadius: '4px', fontSize: '11px', cursor: 'pointer' }}>إغلاق النافذة ✖</button>
           </div>
         </div>
-        {/* الجانب الأيسر: المعاينة الحية للفاتورة وحقن اللوجو الحر للشركة مع تثبيت اسم منصة OURO بالسقف */}
+        {/* الجانب الأيسر: المعاينة الحية للفاتورة وحقن اللوجو الحر للشركة مع تثبيت اسم منصة HONOR بالسقف */}
         <div style={{ flex: '1.2', minWidth: '350px', background: '#000', padding: '15px', borderRadius: '8px', border: '1px solid rgba(212,175,55,0.3)', boxShadow: '0 0 15px rgba(212,175,55,0.1)' }}>
-          <div id="ouroPrintedInvoiceZone" style={{ direction: 'rtl', textAlign: 'right', fontFamily: 'sans-serif', padding: '15px', background: '#000', color: '#fff' }}>
+          <div id="honorPrintedInvoiceZone" style={{ direction: 'rtl', textAlign: 'right', fontFamily: 'sans-serif', padding: '15px', background: '#000', color: '#fff' }}>
             
-            {/* 👑 🏛️ [سقف التوثيق السيادي للمنصة] - تثبيت اسم وشعار منصة OURO Steps أعلى الفاتورة دائماً كضامن رسمي */}
+            {/* 👑 🏛️ [سقف التوثيق السيادي للمنصة] - تثبيت اسم وشعار منصة The HONOR أعلى الفاتورة دائماً كضامن رسمي */}
             <div style={{ textAlign: 'center', borderBottom: '1px dashed rgba(212,175,55,0.3)', paddingBottom: '8px', marginBottom: '12px' }}>
-              <h2 style={{ color: 'var(--gold-primary)', margin: 0, fontSize: '14px', fontWeight: 'bold', letterSpacing: '0.5px' }}> مستند موثق عبر منصة OURO Steps 👑</h2>
+              <h2 style={{ color: 'var(--gold-primary)', margin: 0, fontSize: '14px', fontWeight: 'bold', letterSpacing: '0.5px' }}> مستند موثق عبر منصة The HONOR 👑</h2>
             </div>
 
             {/* ترويسة الفاتورة المرنة وحقن الهوية البصرية اللامركزية والحرّة للشركة المستخدمة */}
@@ -225,9 +225,9 @@ const OuroInvoiceModal = ({ user, onClose }) => {
               </div>
             </div>
 
-            {/* الأختام والتوثيقات الموحدة لـ OURO Steps */}
+            {/* الأختام والتوثيقات الموحدة لـ The HONOR */}
             <div style={{ marginTop: '20px', textAlign: 'center', borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: '8px' }}>
-              <small style={{ color: 'var(--gold-primary)', fontSize: '9px', fontFamily: 'monospace', display: 'block' }}>👑 تم توليد وتأمين هذا المستند عبر محرك الفواتير السحابي الموحد لـ OURO Steps 2026 🏛️</small>
+              <small style={{ color: 'var(--gold-primary)', fontSize: '9px', fontFamily: 'monospace', display: 'block' }}>👑 تم توليد وتأمين هذا المستند عبر محرك الفواتير السحابي الموحد لـ The HONOR 2026 🏛️</small>
             </div>
 
           </div>
@@ -238,4 +238,4 @@ const OuroInvoiceModal = ({ user, onClose }) => {
   );
 };
 
-export default OuroInvoiceModal; // 👑 إغلاق وتصدير نهائي نقي وصافي 100%
+export default HonorInvoiceModal; // 👑 إغلاق وتصدير نهائي نقي وصافي 100%
