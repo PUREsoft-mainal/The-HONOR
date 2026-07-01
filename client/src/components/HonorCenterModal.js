@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // 👑 تم التصحيح والتحصين هنا ليعتمد على الحزمة القياسية الصافية
 
-const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
+const HonorCenterModal = ({ user, socket, API_BASE, onClose }) => {
   const [activeSubTab, setActiveSubTab] = useState('live'); 
   const [centerMeta, setCenterMeta] = useState({ isHost: false, activeRoom: null, hasAccess: false, expiryDate: "" });
   const [liveStreamActive, setLiveStreamActive] = useState(false);
@@ -203,7 +203,7 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
       });
 
       // ربط شريان البث الحي بالفيديو المعروض على الشاشة أمام الطلاب
-      const videoElement = document.getElementById('ouroLiveVideoPreview');
+      const videoElement = document.getElementById('honorLiveVideoPreview');
       if (videoElement) {
         videoElement.srcObject = localStream;
         videoElement.play().catch(e => console.log("تشغيل البث"));
@@ -231,7 +231,7 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
     // ب) [كبسولة حظر تصوير الشاشة بصرياً] تشويش الرؤية وحجب الأصول فور الضغط على أزرار تصوير الشاشة
     const handleKeyDown = (e) => {
       if (e.key === 'PrintScreen' || e.keyCode === 44) {
-        alert("🚨 تنبيه أمني: حظر سيبراني قاطع! يمنع منعاً باتاً التقاط أو تسجيل الشاشة داخل سنتر OURO Steps لحماية الملكية الفكرية!");
+        alert("🚨 تنبيه أمني: حظر سيبراني قاطع! يمنع منعاً باتاً التقاط أو تسجيل الشاشة داخل سنتر The HONOR لحماية الملكية الفكرية!");
         if (navigator.clipboard) navigator.clipboard.writeText(""); // مسح الحافظة فوراً
       }
     };
@@ -338,7 +338,7 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
         <div style={{ flex: '2', minWidth: '340px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(212,175,55,0.2)', paddingBottom: '8px' }}>
-            <h3 style={{ color: 'var(--gold-primary)', margin: 0, fontSize: '15px', fontWeight: 'bold' }}>🏛️ سنتر واجتماعات OURO التعليمي الحركي المباشر</h3>
+            <h3 style={{ color: 'var(--gold-primary)', margin: 0, fontSize: '15px', fontWeight: 'bold' }}>🏛️ سنتر واجتماعات HONOR التعليمي الحركي المباشر</h3>
             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               <button type="button" onClick={() => setActiveSubTab('live')} style={{ padding: '6px 12px', fontSize: '11px', color: '#fff', background: activeSubTab === 'live' ? 'var(--gold-primary)' : 'transparent', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>🎥 البث المباشر</button>
               <button type="button" onClick={() => setActiveSubTab('lectures')} style={{ padding: '6px 12px', fontSize: '11px', color: '#fff', background: activeSubTab === 'lectures' ? 'var(--gold-primary)' : 'transparent', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>🎬 محاضرات البث</button>
@@ -381,7 +381,7 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
                       
                       <video 
                         ref={localVideoRef}
-                        id="ouroLiveVideoPreview" 
+                        id="honorLiveVideoPreview" 
                         autoPlay 
                         playsInline 
                         muted 
@@ -393,7 +393,7 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
                           {isCamActive ? "🛑 إيقاف الكاميرا" : "📸 تشغيل الكاميرا"}
                         </button>
                         <button type="button" onClick={() => {
-                          const videoElement = document.getElementById('ouroLiveVideoPreview');
+                          const videoElement = document.getElementById('honorLiveVideoPreview');
                           if (videoElement && videoElement.srcObject) {
                             videoElement.srcObject.getTracks().forEach(track => track.stop());
                           }
@@ -515,4 +515,4 @@ const OuroCenterModal = ({ user, socket, API_BASE, onClose }) => {
   );
 };
 
-export default OuroCenterModal;
+export default HonorCenterModal;
