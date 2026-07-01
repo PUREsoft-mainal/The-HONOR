@@ -3,14 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-const OuroAiAssistant = ({ user, API_BASE, onClose }) => {
+const HonorAiAssistant = ({ user, API_BASE, onClose }) => {
   // 🔒 أ) أقفال التراخيص السنوية ومصيدة التحقق من ترخيص ال-AI فالسحاب
   const [hasAiAccess, setHasAiAccess] = useState(false);
   const [requestPending, setRequestPending] = useState(false);
 
   // 💬 ب) مصفوفة كابينة الشات التفاعلي المتبادل وصندوق الرسائل الحية
   const [messages, setMessages] = useState([
-    { id: 'genesis', sender: 'ai', text: `مرحباً بك يا صديقي الملكي 👑 أنا المساعد الذكي المطور لمنصة OURO Steps لعام 2026! كيف يمكنني صياغة البرمجيات أو أتمتة حساباتك ومصانعك الآن؟ 🤖✨` }
+    { id: 'genesis', sender: 'ai', text: `مرحباً بك يا صديقي الملكي 👑 أنا المساعد الذكي المطور لمنصة The HONOR لعام 2026! كيف يمكنني صياغة البرمجيات أو أتمتة حساباتك ومصانعك الآن؟ 🤖✨` }
   ]);
   const [inputPrompt, setInputPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -175,4 +175,4 @@ const OuroAiAssistant = ({ user, API_BASE, onClose }) => {
   );
 };
 
-export default OuroAiAssistant; // 👑 التصدير القياسي للمكون بنقاء ثبات فلكي 100%
+export default HonorAiAssistant; // 👑 التصدير القياسي للمكون بنقاء ثبات فلكي 100%
