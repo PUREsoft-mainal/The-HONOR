@@ -38,7 +38,7 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 7860; // البورت الخاص بـ Hugging Face
 
-const mongoURI = "mongodb+srv://mostafa:01027411921@cluster0.kgw7td9.mongodb.net/ouro_db?retryWrites=true&w=majority";
+const mongoURI = "mongodb+srv://ourosystem0_db_user:Xx6OyoXqfqjfxyOp@cluster0.cgfu89o.mongodb.net/honor_db?retryWrites=true&w=majority";
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ متصل بـ MongoDB Atlas بنجاح ساحق"))
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
