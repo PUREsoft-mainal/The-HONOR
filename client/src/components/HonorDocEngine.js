@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 
-const OuroDocEngine = ({ user, onClose }) => {
+const HonorDocEngine = ({ user, onClose }) => {
   // 🔒 أ) بيانات الورقة الأولى والغلاف الرسمي للمستند أو الملزمة التعليمية
   const [docTitle, setDocTitle] = useState(""); // عنوان المستند
   const [docAuthor, setDocAuthor] = useState(""); // اسم الكاتب أو المحاضر
@@ -70,10 +70,10 @@ const OuroDocEngine = ({ user, onClose }) => {
 
   // 🏆 خاصية الحفظ كملف PDF الملكية المباشرة للملازم التعليمية
   const exportDocToPDF = () => {
-    const element = document.getElementById('ouroMasterPrintableZone');
+    const element = document.getElementById('honorMasterPrintableZone');
     const opt = {
       margin: 0,
-      filename: `مستند_${docTitle || 'Ouro'}.pdf`,
+      filename: `مستند_${docTitle || 'Honor'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -83,7 +83,7 @@ const OuroDocEngine = ({ user, onClose }) => {
 
   // 🖨️ خاصية الطباعة الفورية الصافية المتوافقة مع طابعات الورق والبرواز
   const handlePrintDoc = () => {
-    const printContent = document.getElementById('ouroMasterPrintableZone').innerHTML;
+    const printContent = document.getElementById('honorMasterPrintableZone').innerHTML;
     const originalContent = document.body.innerHTML;
     
     document.body.innerHTML = `
@@ -128,8 +128,8 @@ const OuroDocEngine = ({ user, onClose }) => {
 
           {/* أزرار حقن الوسائط والجداول اللامركزية */}
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            <input type="file" id="ouroDocImgInput" accept="image/*" hidden onChange={handleUploadImageToPage} />
-            <button type="button" onClick={() => document.getElementById('ouroDocImgInput').click()} style={{ flex: 1, background: '#e67e22', color: '#fff', border: 'none', padding: '6px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>📸 حقن صورة بالورقة</button>
+            <input type="file" id="honorDocImgInput" accept="image/*" hidden onChange={handleUploadImageToPage} />
+            <button type="button" onClick={() => document.getElementById('honorDocImgInput').click()} style={{ flex: 1, background: '#e67e22', color: '#fff', border: 'none', padding: '6px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>📸 حقن صورة بالورقة</button>
             <button type="button" onClick={() => setShowGridCreator(!showGridCreator)} style={{ flex: 1, background: '#2980b9', color: '#fff', border: 'none', padding: '6px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>📊 حقن جدول مرن</button>
           </div>
 
@@ -160,7 +160,7 @@ const OuroDocEngine = ({ user, onClose }) => {
         </div>
         {/* الجانب الأيسر: المعاينة الحية للأوراق المتعددة مجهزة ومحاطة بالبرواز الملكي والترقيم */}
         <div style={{ flex: '1.3', minWidth: '350px', background: '#111', padding: '15px', borderRadius: '8px', border: '1px solid rgba(212,175,55,0.2)', maxHeight: '75vh', overflowY: 'auto' }}>
-          <div id="ouroMasterPrintableZone" style={{ background: '#fff', color: '#000', padding: '0', margin: '0' }}>
+          <div id="honorMasterPrintableZone" style={{ background: '#fff', color: '#000', padding: '0', margin: '0' }}>
             
             {/* توليد وحلقة رسم الأوراق المتتالية حركياً داخل ال-PDF والطباعة */}
             {pages.map((page, index) => (
@@ -211,7 +211,7 @@ const OuroDocEngine = ({ user, onClose }) => {
 
                 {/* 🔗 🖨️ تذليل الصفحة: طباعة رابط الموقع ورقم الورقة الترتيبي أسفل البرواز بدقة */}
                 <div style={{ position: 'absolute', bottom: '6mm', left: '15mm', right: '15mm', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', fontFamily: 'monospace', color: '#555', borderTop: '1px solid #eee', paddingTop: '4px' }}>
-                  <span>🌐 رابط المنصة الموثق: ouro-steps.vercel.app</span>
+                  <span>🌐 رابط المنصة الموثق: the-honor.vercel.app</span>
                   <span style={{ fontWeight: 'bold', color: 'var(--gold-primary)' }}>صفحة رقم ({index + 1})</span>
                 </div>
 
@@ -226,4 +226,4 @@ const OuroDocEngine = ({ user, onClose }) => {
   );
 };
 
-export default OuroDocEngine; // 👑 القفل القياسي والتصدير النهائي للمحرك بنقاء 100%
+export default HonorDocEngine; // 👑 القفل القياسي والتصدير النهائي للمحرك بنقاء 100%
