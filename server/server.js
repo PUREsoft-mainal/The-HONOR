@@ -11,7 +11,7 @@ const { GoogleGenAI } = require('@google/genai');
 // ==========================================================================
 // 🛡️ [مستودع ملفات الطلبات السحابي الموحد] - حفظ وتأمين اشتراكات السنتر والـ API
 // ==========================================================================
-const REQUESTS_FILE_PATH = path.join(__dirname, 'ouro_pending_requests.json');
+const REQUESTS_FILE_PATH = path.join(__dirname, 'honor_pending_requests.json');
 
 // دالة مركزية لضمان قراءة وحفظ الطلبات بملف نصي ثابت يمنع ضياع المعاملات
 const readCloudRequestsFile = () => {
@@ -44,7 +44,7 @@ mongoose.connect(mongoURI)
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
 
 app.use(cors({
-    origin: ["https://ouro-steps.vercel.app", "https://puresoft-mainal-ouro-steps.hf.space"],
+    origin: ["https://the-honor.vercel.app/", "https://puresoft-mainal-the-honor.hf.space"],
     credentials: true,
     methods: ["GET", "POST", "DELETE"]
 }));
@@ -68,7 +68,7 @@ const MarketModel = mongoose.model('Market', MarketSchema);
 // ==========================================================================
 
 // أ) إضافة جدول الإشعارات والطلبات المعلقة للأدمن Mostafa والمحاضرين فالسحاب
-const OuroCenterRequestSchema = new mongoose.Schema({
+const HonorCenterRequestSchema = new mongoose.Schema({
     requestId: { type: String, required: true, unique: true },
     type: { type: String, required: true }, // 'teacher_access' (طلب تدريس) أو 'student_join' (طلب انضمام طالب)
     applicant: { type: String, required: true }, // اسم مقدم الطلب
@@ -77,7 +77,7 @@ const OuroCenterRequestSchema = new mongoose.Schema({
     expiresAt: { type: Date }, // تاريخ انتهاء الصلاحية الـ 30 يوماً
     createdAt: { type: Date, default: Date.now }
 });
-const OuroCenterRequestModel = mongoose.model('OuroCenterRequest', OuroCenterRequestSchema);
+const HonorCenterRequestModel = mongoose.model('HonorCenterRequest', HonorCenterRequestSchema);
 
 // ==========================================================================
 // ⚙️ [بوابة المطورين والـ API] تحويل كامل المزايا لنظام تفويض الأدمن والمشرفين
@@ -114,13 +114,13 @@ const PrayerAssetSchema = new mongoose.Schema({
 const PrayerAssetModel = mongoose.model('PrayerAsset', PrayerAssetSchema);
 
 // 👑 [الملف السحابي المستقل لكل مستخدم] جدول إدارة وحفظ العملات الحقيقية المتسلسلة ومنع التلاعب
-const OuroUserLedgerSchema = new mongoose.Schema({
+const HonorUserLedgerSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
-    ouroBalance: { type: Number, default: 0 }, // عدد العملات الفعلي المحفوظ سحابياً لكل مستخدم
+    honorBalance: { type: Number, default: 0 }, // عدد العملات الفعلي المحفوظ سحابياً لكل مستخدم
     updatedAt: { type: Date, default: Date.now }
 });
 
-const OuroUserLedgerModel = mongoose.model('OuroUserLedger', OuroUserLedgerSchema);
+const HonorUserLedgerModel = mongoose.model('HonorUserLedger', HonorUserLedgerSchema);
 
 // 👑 معيار معمارية الحسابات الملكية والأصدقاء بـ MongoDB
 const UserSchema = new mongoose.Schema({
@@ -148,7 +148,7 @@ const AdSchema = new mongoose.Schema({
 const AdModel = mongoose.model('Ad', AdSchema);
 
 // ==========================================================================
-// 🏛️ [تطهير الهيكل المركزي لـ OURO Steps] - إبادة المحافظ والعملات وتثبيت جداول التصاريح
+// 🏛️ [تطهير الهيكل المركزي لـ HONOR ] - إبادة المحافظ والعملات وتثبيت جداول التصاريح
 // ==========================================================================
 
 // 1. الجدول الإداري المركزي الموحد لإدارة وتوثيق تصاريح السنتر والاجتماعات والميزات
@@ -193,7 +193,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }); // تأكيد تفعيل الحزمة هنا مرة واحدة فقط في رأس الملف
 
 // ==========================================================================
-// 🪙 [تم التطهير والحسم السيادي] - العقد الذكي ومحرك التعدين الصافي لبلوكتشين OURO
+// 🪙 [تم التطهير والحسم السيادي] - العقد الذكي ومحرك التعدين الصافي لبلوكتشين HONOR
 // ==========================================================================
 const { google } = require('googleapis');
 
@@ -376,7 +376,7 @@ app.get('/api/prayer/assets', async (req, res) => {
 // تهيئة السوكيت (Socket.io) ليدعم الاتصالات السحابية والـ WebSockets المشفرة (WSS)
 const io = new Server(server, {
     cors: {
-        origin: ["https://ouro-steps.vercel.app", "https://puresoft-mainal-ouro-steps.hf.space"],
+        origin: ["https://the-honor.vercel.app/", "https://puresoft-mainal-the-honor.hf.space"],
         credentials: true
     },
     transports: ['polling', 'websocket'], // 👑 تأمين التبديل السحابي التلقائي الحامي من الحظر والـ CORS
@@ -772,7 +772,7 @@ io.on('connection', (socket) => {
     socket.on('admin_approve_teacher_request', async (data) => {
         try {
             if (!data || !data.requestId) return;
-            const reqDoc = await OuroCenterRequestModel.findOne({ requestId: data.requestId });
+            const reqDoc = await HonorCenterRequestModel.findOne({ requestId: data.requestId });
             
             // استخراج اسم مقدم الطلب سواء من قاعدة البيانات السحابية أو كتل الجدولة الآلية
             let applicantName = reqDoc ? reqDoc.applicant : "";
@@ -810,7 +810,7 @@ io.on('connection', (socket) => {
                 const adminId = adminDoc ? adminDoc._id.toString() : null;
 
                 // 🔐 أرشفة وتحديث الملف العام للمشتركين النشطين بقفل الهارد المادي
-                const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'ouro_active_teachers.json');
+                const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'honor_active_teachers.json');
                 let subscribersDb = [];
                 try {
                     if (fs.existsSync(ACTIVE_SUBSCRIBERS_PATH)) {
@@ -873,7 +873,7 @@ io.on('connection', (socket) => {
     // 4️⃣ [المستمع 4]: المزامنة الحية وضخ حزم المذكرات والفيديوهات المسجلة للسنتر التعليمي - لا يمس نهائياً
     socket.on('get_center_status', async (data) => {
         try {
-            const latestCenter = await OuroCenterModel.findOne({}).sort({ createdAt: -1 });
+            const latestCenter = await HonorCenterModel.findOne({}).sort({ createdAt: -1 });
             if (latestCenter) {
                 socket.emit('center_data_package', {
                     videos: latestCenter.allVideos || [],
@@ -894,7 +894,7 @@ io.on('connection', (socket) => {
     socket.on('admin_approve_teacher_request', async (data) => {
         try {
             if (!data || !data.requestId) return;
-            const reqDoc = await OuroCenterRequestModel.findOne({ requestId: data.requestId });
+            const reqDoc = await HonorCenterRequestModel.findOne({ requestId: data.requestId });
             
             // التطهير الآمن: استخراج اسم مقدم الطلب سواء من المونجو أو ملف الجدولة السحابي
             let applicantName = reqDoc ? reqDoc.applicant : "";
@@ -930,7 +930,7 @@ io.on('connection', (socket) => {
                 }
 
                 // 🔐 [أرشفة وتحديث الملف العام للمشتركين النشطين بقفل الهارد المادي لضمان بقاء الخاصية مفتوحة]
-                const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'ouro_active_teachers.json');
+                const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'honor_active_teachers.json');
                 let subscribersDb = [];
                 try {
                     if (fs.existsSync(ACTIVE_SUBSCRIBERS_PATH)) {
@@ -968,7 +968,7 @@ io.on('connection', (socket) => {
         try {
             if (!data || !data.username || !data.host) return;
             const reqId = 'req_' + Date.now();
-            const newReq = new OuroCenterRequestModel({
+            const newReq = new HonorCenterRequestModel({
                 requestId: reqId,
                 type: 'student_join',
                 applicant: data.username.trim(),
@@ -1194,7 +1194,7 @@ io.on('connection', (socket) => {
             });
             await newPermission.save();
 
-            // 🔓 [تطهير] تم حذف وإلغاء حقول الـ OuroLedgerModel تماماً لحماية سعة وقوة الـ Database السحابية [▲].
+            // 🔓 [تطهير] تم حذف وإلغاء حقول الـ HonorLedgerModel تماماً لحماية سعة وقوة الـ Database السحابية [▲].
 
             console.log(`👤 🏛️ تم تأسيس الهوية الإدارية المعقمة بنجاح والتسجيل للحساب الجديد المعلق: ${data.username}`);
             socket.emit('register_success', { username: newUser.username, role: newUser.role });
@@ -1417,7 +1417,7 @@ io.on('connection', (socket) => {
 // ⏳ [المراقب الآلي الفلكي للملف العام] تفقد دوري صارم كل ساعة لمسح الحسابات المنتهية تلقائياً
 setInterval(() => {
     try {
-        const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'ouro_active_teachers.json');
+        const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'honor_active_teachers.json');
         if (!fs.existsSync(ACTIVE_SUBSCRIBERS_PATH)) return;
 
         let subscribers = JSON.parse(fs.readFileSync(ACTIVE_SUBSCRIBERS_PATH, 'utf-8'));
@@ -2077,11 +2077,11 @@ app.get('/api/prayer-times', (req, res) => {
 });
 
 // ==========================================================================
-// 🔑 دالة توليد مفاتيح عشوائية فريدة ومأمنة سيبرانياً لمنصات المطورين لـ OURO Steps
+// 🔑 دالة توليد مفاتيح عشوائية فريدة ومأمنة سيبرانياً لمنصات المطورين لـ Honor
 // ==========================================================================
 const generateSecureApiKey = () => {
     const crypto = require('crypto');
-    return 'ouro_live_' + crypto.randomBytes(24).toString('hex');
+    return 'honor_live_' + crypto.randomBytes(24).toString('hex');
 };
 
 // 2. [مسار تقديم طلب استخراج مفتاح API] - ينشأ معلقاً ويخطر المشرفين فوراً
@@ -2092,7 +2092,7 @@ app.post('/api/developer/create-key', async (req, res) => {
 
         // توليد شفرة مفتاح الـ API الفريدة والمشفرة
         const crypto = require('crypto');
-        const generatedApiKey = 'ouro_api_' + crypto.randomBytes(16).toString('hex');
+        const generatedApiKey = 'honor_api_' + crypto.randomBytes(16).toString('hex');
 
         const newApiKeyDoc = new DeveloperKeyModel({
             id: 'key_' + Date.now().toString(),
@@ -2253,7 +2253,7 @@ app.post('/api/center/upload-to-drive', async (req, res) => {
         // 🎯 3. حفظ الرابط النظيف بجدول السنتر التعليمي داخل المونجو بشكل محدد
         const searchFilter = centerId ? { _id: centerId } : {}; // ⚠️ يفضل دائماً التحديث بناءً على ID السنتر التعليمي
         
-        const updatedCenter = await OuroCenterModel.findOneAndUpdate(
+        const updatedCenter = await HonorCenterModel.findOneAndUpdate(
             searchFilter, 
             updateQuery,
             { new: true }
@@ -2323,7 +2323,7 @@ app.post('/api/center/rent-room', async (req, res) => {
         // 🧠 لو الحساب يمتلك تصريحاً ساري المفعول، يعبر طيراناً لتوليد القاعة
         if (hasActiveAccess) {
             const generatedRoomId = 'room_' + Date.now().toString();
-            const newCenterRoom = new OuroCenterModel({
+            const newCenterRoom = new HonorCenterModel({
                 roomId: generatedRoomId,
                 host: username.trim(),
                 allVideos: [
@@ -2390,7 +2390,7 @@ app.post('/api/admin/fetch-live-requests', async (req, res) => {
 // 🏛️ [مسار جلب قائمة المشتركين الحية بالملف العام] - احقنه أسفل مسار fetch-live-requests فوراً:
 app.get('/api/admin/active-teachers', async (req, res) => {
     try {
-        const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'ouro_active_teachers.json');
+        const ACTIVE_SUBSCRIBERS_PATH = path.join(__dirname, 'honor_active_teachers.json');
         
         // التحقق من وجود الملف العام وقراءته، أو إرجاع مصفوفة فارغة مأمنة من الكراش
         if (!fs.existsSync(ACTIVE_SUBSCRIBERS_PATH)) {
