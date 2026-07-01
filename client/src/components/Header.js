@@ -8,7 +8,7 @@ const Header = ({ activeUsers, totalUsers, user, renderCoinBadge }) => {
   const [showCS, setShowCS] = useState(false);
   
   // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
-  const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+  const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
   
   // 🔥 [تم التطهير والإصلاح] تم مسح كود (const socket = io) المتعارض من هنا نهائياً لمنع انهيار الـ Build وحظر الـ CORS
   
@@ -39,7 +39,7 @@ const Header = ({ activeUsers, totalUsers, user, renderCoinBadge }) => {
   };
 
   return (
-    <header className="ouro-header">
+    <header className="honor-header">
 
       {/* جهة اليمين: الإحصائيات + خدمة العملاء فقط دون أي تعديل أو مساس */}
       <div className="header-right">
