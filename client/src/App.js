@@ -27,14 +27,15 @@ import './App.css';
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
 const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
-// 👑 [تم الحسم والتطهير] تهيئة السوكت النقي والمتوافق مع جدار حماية خوادم Hugging Face
-const socket = io(API_BASE, { 
-  transports: ['websocket', 'polling'], // البدء الوجوبي بالـ websocket لاختراق البروكسي السحابي بنجاح
-  secure: true,
-  reconnectionAttempts: 15,
-  reconnectionDelay: 1000,
-  rejectUnauthorized: false
-}); // 👈 تم حذف واقتلاع سطر الـ path كلياً لفتح البوابات وربط شريان السيرفر بالمتصفحات حياً!
+// 👑 [قفل الحسم السيبراني لمنع حظر خوادم Hugging Face والـ CORS في فايرفوكس]
+const socket = io("https://puresoft-mainal-the-honor.hf.space", {
+  transports: ['polling', 'websocket'], // 👈 إجبار الـ Polling أولاً لكسر جدار الحظر السحابي
+  withCredentials: true,
+  rememberUpgrade: true,
+  autoConnect: true,
+  reconnectionAttempts: Infinity,
+  timeout: 10000
+});
 
 
 function App() {
