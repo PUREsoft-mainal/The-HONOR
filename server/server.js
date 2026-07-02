@@ -44,7 +44,7 @@ mongoose.connect(mongoURI)
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
 
 app.use(cors({
-    origin: ["https://the-honor.vercel.app/", "https://puresoft-mainal-the-honor.hf.space"],
+    origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
     credentials: true,
     methods: ["GET", "POST", "DELETE"]
 }));
@@ -376,11 +376,17 @@ app.get('/api/prayer/assets', async (req, res) => {
 // تهيئة السوكيت (Socket.io) ليدعم الاتصالات السحابية والـ WebSockets المشفرة (WSS)
 const io = new Server(server, {
     cors: {
-        origin: ["https://the-honor.vercel.app/", "https://puresoft-mainal-the-honor.hf.space"],
+        origin: [
+            "https://https://the-honor.vercel.app", 
+            "https://https://puresoft-mainal-the-honor.hf.space",
+        ],
+        methods: ["GET", "POST", "DELETE"],
         credentials: true
     },
-    transports: ['polling', 'websocket'], // 👑 تأمين التبديل السحابي التلقائي الحامي من الحظر والـ CORS
-    allowEIO3: true
+    transports: ['polling', 'websocket'], // 👑 قفل التبديل التلقائي الحامي من حظر الـ WebSockets بفايرفوكس
+    allowEIO3: true,
+    pingTimeout: 60000,
+    pingInterval: 25000
 });
 
 // 👑 [الحل القاطع والأزلي] ربط وحقن السوكيت المحلى في الكائن العالمي لتوثيق البث فوراً
