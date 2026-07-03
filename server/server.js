@@ -224,17 +224,6 @@ const GroupMessageSchema = new mongoose.Schema({
 const GroupMessageModel = mongoose.model('GroupMessage', GroupMessageSchema);
 
 app.use(express.json());
-
-// السطور من 33 إلى 36 تقريباً (أعلى الملف)
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, UPLOADS_DIR),
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
-const upload = multer({ storage }); // تأكيد تفعيل الحزمة هنا مرة واحدة فقط في رأس الملف
-
 // ==========================================================================
 // 🪙 [تم التطهير والحسم السيادي] - العقد الذكي ومحرك التعدين الصافي لبلوكتشين HONOR
 // ==========================================================================
