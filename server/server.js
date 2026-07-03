@@ -518,14 +518,6 @@ const checkAndCleanChatSize = (filePath) => {
     }
 };
 
-
-app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], credentials: true }));
-app.use(express.json());
-app.use('/uploads', express.static(UPLOADS_DIR));
-
-
-let activeUsers = 0;
-
 // ==========================================================================
 // 🕋 المخطط الهيكلي القياسي للمجموعات وغرف الشات بـ MongoDB Atlas (بديل الـ JSON)
 // ==========================================================================
