@@ -80,25 +80,23 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage }); 
 
-// 3️⃣ إعادة صياغة محرك السوكيت (Socket.io) بنفق سحابي نقي ومغلق
+// ==========================================================================
+// 📡 تهيئة السوكيت (Socket.io) بنظام العبور العام المفتوح لحل أزمة فايرفوكس
+// ==========================================================================
 const io = new Server(server, {
     cors: {
-        origin: [
-            "https://the-honor.vercel.app/", 
-            "https://puresoft-mainal-the-honor.hf.space" // 🔐 تم إبادة محلي localhost كلياً لفتح السعة والأمان
-        ],
+        origin: "*",             // 👈 السماح المطلق والعام لجميع المنصات لمنع أي تضارب في جدار الـ CORS
         methods: ["GET", "POST", "DELETE"],
-        credentials: false 
+        credentials: false       // 👈 إلغاء طلب الـ Credentials لإنهاء أزمة الحظر كلياً
     },
-    transports: ['websocket'], 
-    path: '/honor-secure-ws/', // 👑 قفل مطابقة مسار النفق بالملي ثانية مع الفرونت إند لكسر الحظر كلياً
+    transports: ['polling'],     // 👑 إجبار الـ Polling فقط ليتطابق مع واجهتك ويخترق جدار حماية Hugging Face مسالماً
     allowEIO3: true,
     pingTimeout: 60000,
     pingInterval: 25000
 });
 
 global.io = io; 
-console.log("👑 [Cloud-Only Access Control Injected] تم عزل وحظر النطاقات المحلية؛ السيرفر يرتكز فلكياً على السحاب الآن!");
+console.log("👑 [Hybrid Polling Access Granted] تم فتح البوابة عبر تيار الويب المسالم؛ فايرفوكس سيعبر الآن!");
 
 
 // 👑 [صياغة قفل الأمان السحابي الثابت] بناء وهيكلة جدول السوق بـ MongoDB Atlas للأبد
