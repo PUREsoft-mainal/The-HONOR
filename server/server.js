@@ -51,7 +51,7 @@ mongoose.connect(mongoURI)
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     // حظر قطعي وعزل كامل لـ localhost؛ السماح فقط بـ Vercel و Hugging Face
-    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("hf.space"))) {
+    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("puresoft-mainal-the-honor.hf.space"))) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
     res.setHeader('Access-Control-Allow-Credentials', 'true'); 
@@ -84,8 +84,8 @@ const upload = multer({ storage });
 const io = new Server(server, {
     cors: {
         origin: [
-            "https://vercel.app", 
-            "https://hf.space" // 🔐 تم إبادة محلي localhost كلياً لفتح السعة والأمان
+            "https://the-honor.vercel.app/", 
+            "https://puresoft-mainal-the-honor.hf.space" // 🔐 تم إبادة محلي localhost كلياً لفتح السعة والأمان
         ],
         methods: ["GET", "POST", "DELETE"],
         credentials: true 
