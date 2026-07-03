@@ -44,33 +44,29 @@ mongoose.connect(mongoURI)
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
 
 // ==========================================================================
-// 🛡️ [التثبيت السيادي الصلب لجدار الـ CORS] - التدمير الشامل لحظر فايرفوكس
+// 🛡️ [التثبيت السيادي الصلب لجدار الـ CORS السحابي] - إلغاء النطاقات المحلية نهائياً
 // ==========================================================================
 
-// 1️⃣ إجبار Express على ضخ الاستجابة الصارمة لكل أصل بشكل مباشر وثابت
+// 1️⃣ إجبار Express على ضخ الاستجابة الصارمة للأصول السحابية الرسمية فقط
 app.use((req, res, next) => {
     const origin = req.headers.origin;
-    // إذا كان الأصل قادماً من Vercel أو Hugging Face أو المطور المحلي، ثبته فوراً بصياغته النصية
-    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("puresoft-mainal-the-honor.hf.space"))) {
+    // حظر قطعي وعزل كامل لـ localhost؛ السماح فقط بـ Vercel و Hugging Face
+    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("hf.space"))) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
-    res.setHeader('Access-Control-Allow-Credentials', 'true'); // 👈 حقن نصي مباشر وصارم يسحق الـ Missing Allow Credentials
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     
-    // التعامل مع طلبات الفحص المبدئية للمتصفحات (Preflight OPTIONS Requests) لتعبر فوراً دون عرقلة
     if (req.method === 'OPTIONS') {
         return res.sendStatus(200);
     }
     next();
 });
 
-// 2️⃣ تعطيل حزمة Express CORS الديناميكية القديمة لتجنب تضارب الترويسات
-// (تأكد من مسح أو إغلاق كود app.use(cors(...)) القديم تماماً ليعمل الميدلوير المباشر بأعلى بنقاء)
-
 app.use(express.json());
 
-// 📁 إعداد ملتر والمجلدات 
+// 📁 إعداد ملتر والمجلدات
 const UPLOADS_DIR = path.join('/tmp', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 app.use('/uploads', express.static(UPLOADS_DIR));
@@ -84,23 +80,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage }); 
 
-// ==========================================================================
-// 👑 [الحسم السيبراني المطلق] - إلغاء تشفير الترويسات المعقدة لـ Hugging Face
-// ==========================================================================
+// 3️⃣ إعادة صياغة محرك السوكيت (Socket.io) بنفق سحابي نقي ومغلق
 const io = new Server(server, {
     cors: {
-        origin: "*",             // 👈 السماح المطلق لـ Vercel وجميع المتصفحات لكسر جدار الحظر كلياً
+        origin: [
+            "https://vercel.app", 
+            "https://hf.space" // 🔐 تم إبادة محلي localhost كلياً لفتح السعة والأمان
+        ],
         methods: ["GET", "POST", "DELETE"],
-        credentials: false       // 👈 إلغاء طلب الـ Credentials لإنهاء أزمة Missing Allow Credentials للأبد!
+        credentials: true 
     },
-    transports: ['polling', 'websocket'], // تأمين العبور الهجين المتوافق مع شروط فايرفوكس
+    transports: ['polling', 'websocket'], 
     allowEIO3: true,
     pingTimeout: 60000,
     pingInterval: 25000
 });
 
 global.io = io; 
-console.log("👑 [Sovereign CORS Destroyed] تم فتح بوابات السوكت عالمياً؛ فايرفوكس سيعبر الآن في ميكروثانية!");
+console.log("👑 [Cloud-Only Access Control Injected] تم عزل وحظر النطاقات المحلية؛ السيرفر يرتكز فلكياً على السحاب الآن!");
 
 
 // 👑 [صياغة قفل الأمان السحابي الثابت] بناء وهيكلة جدول السوق بـ MongoDB Atlas للأبد
