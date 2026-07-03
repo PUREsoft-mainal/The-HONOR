@@ -84,24 +84,23 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage }); 
 
-// 3️⃣ إعادة صياغة محرك السوكيت (Socket.io) ليعتمد على الاستقبال الشامل المأمن بالـ Credentials
+// ==========================================================================
+// 👑 [الحسم السيبراني المطلق] - إلغاء تشفير الترويسات المعقدة لـ Hugging Face
+// ==========================================================================
 const io = new Server(server, {
     cors: {
-        origin: [
-            "https://vercel.app", 
-            "https://puresoft-mainal-the-honor.hf.space",
-        ],
+        origin: "*",             // 👈 السماح المطلق لـ Vercel وجميع المتصفحات لكسر جدار الحظر كلياً
         methods: ["GET", "POST", "DELETE"],
-        credentials: true // 👈 قفل المطابقة العتادية لـ Polling
+        credentials: false       // 👈 إلغاء طلب الـ Credentials لإنهاء أزمة Missing Allow Credentials للأبد!
     },
-    transports: ['polling', 'websocket'], 
+    transports: ['polling', 'websocket'], // تأمين العبور الهجين المتوافق مع شروط فايرفوكس
     allowEIO3: true,
     pingTimeout: 60000,
     pingInterval: 25000
 });
 
 global.io = io; 
-console.log("👑 [Sovereign CORS Overlay Injected] تم فرض الترويسات النصية الثابتة؛ فايرفوكس سيعبر الآن قسرياً!");
+console.log("👑 [Sovereign CORS Destroyed] تم فتح بوابات السوكت عالمياً؛ فايرفوكس سيعبر الآن في ميكروثانية!");
 
 
 // 👑 [صياغة قفل الأمان السحابي الثابت] بناء وهيكلة جدول السوق بـ MongoDB Atlas للأبد
