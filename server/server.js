@@ -420,27 +420,6 @@ app.get('/api/prayer/assets', async (req, res) => {
         res.json(config);
     } catch (err) { res.json({ kaabaImgUrl: '/assets/kaaba.png', adhanAudioUrl: '/assets/adhan.mp3' }); }
 });
-
-// تهيئة السوكيت (Socket.io) ليدعم الاتصالات السحابية والـ WebSockets المشفرة (WSS)
-const io = new Server(server, {
-    cors: {
-        origin: [
-            "https://https://the-honor.vercel.app", 
-            "https://https://puresoft-mainal-the-honor.hf.space",
-        ],
-        methods: ["GET", "POST", "DELETE"],
-        credentials: true
-    },
-    transports: ['polling', 'websocket'], // 👑 قفل التبديل التلقائي الحامي من حظر الـ WebSockets بفايرفوكس
-    allowEIO3: true,
-    pingTimeout: 60000,
-    pingInterval: 25000
-});
-
-// 👑 [الحل القاطع والأزلي] ربط وحقن السوكيت المحلى في الكائن العالمي لتوثيق البث فوراً
-global.io = io; 
-console.log("✅ تم دمج وتوصيل شريان السوكت بالخزانة العالمية؛ طلبات الإدارة ستتوهج الآن حياً!");
-
 const CONVERSATIONS_DIR = path.join(__dirname, 'conversations'); // مجلد مستقل لحفظ ملفات شات الأصدقاء
 const USERS_FILE = path.join(__dirname, 'users.json');
 const CHAT_FILE = path.join(__dirname, 'chat.json');
