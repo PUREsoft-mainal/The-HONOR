@@ -27,11 +27,14 @@ import './App.css';
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
 const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
-// 👑 [قفل الحسم السيبراني لمنع حظر خوادم Hugging Face والـ CORS في فايرفوكس]
-const socket = io("https://puresoft-mainal-the-honor.hf.space", {
-  transports: ['polling', 'websocket'], // 👈 إجبار الـ Polling أولاً لكسر جدار الحظر السحابي
-  withCredentials: true,
-  rememberUpgrade: true,
+// ==========================================================================
+// 🛡️ [قفل التحصين السيادي] - اختراق جدار حماية Hugging Face بالـ WebSockets الصافي
+// ==========================================================================
+const socket = io(API_BASE, {
+  transports: ['websocket'], // 👈 الحسم البرمجي: نفق ويب سوكيت صافي ومباشر يتخطى تفتيش ترويسات الـ HTTP
+  upgrade: false,            // منع محاولات الترقية التالفة التي تسبب تهنيج المتصفحات
+  withCredentials: false,    // إلغاء طلب الـ Credentials لأن البروتوكول الصافي لا يحتاجها سيبرانياً
+  forceNew: true,
   autoConnect: true,
   reconnectionAttempts: Infinity,
   timeout: 10000
