@@ -28,12 +28,12 @@ import './App.css';
 const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
 
 // ==========================================================================
-// 🛡️ [قفل التحصين السيادي] - اختراق جدار حماية Hugging Face بالـ WebSockets الصافي
+// 🛡️ [قفل تخصيص النفق السحابي الموحد] - التدمير الشامل لحظر خوادم Hugging Face
 // ==========================================================================
 const socket = io(API_BASE, {
-  transports: ['websocket'], // 👈 الحسم البرمجي: نفق ويب سوكيت صافي ومباشر يتخطى تفتيش ترويسات الـ HTTP
-  upgrade: false,            // منع محاولات الترقية التالفة التي تسبب تهنيج المتصفحات
-  withCredentials: false,    // إلغاء طلب الـ Credentials لأن البروتوكول الصافي لا يحتاجها سيبرانياً
+  transports: ['websocket'], // إجبار الـ WebSocket الصافي لمنع ثغرات الـ Polling
+  upgrade: false,
+  path: '/honor-secure-ws/', // 👈 الحسم: تخصيص مسار نفق سري فريد يخترق جدار حماية Hugging Face دون حجب
   forceNew: true,
   autoConnect: true,
   reconnectionAttempts: Infinity,
