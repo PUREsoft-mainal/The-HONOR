@@ -26,14 +26,13 @@ import './App.css';
 
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
 const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
-
 // ==========================================================================
-// 🛡️ [قفل تخصيص النفق السحابي الموحد] - التدمير الشامل لحظر خوادم Hugging Face
+// 🛡️ [قفل العبور السحابي الهجين] - سحق حظر الـ Connection Refused للأبد
 // ==========================================================================
 const socket = io(API_BASE, {
-  transports: ['websocket'], // إجبار الـ WebSocket الصافي لمنع ثغرات الـ Polling
-  upgrade: false,
-  path: '/honor-secure-ws/', // 👈 الحسم: تخصيص مسار نفق سري فريد يخترق جدار حماية Hugging Face دون حجب
+  transports: ['polling'],     // 👈 الحسم البرمجي: العبور بنمط Polling كطلبات ويب طبيعية لا يحظرها جدار السحاب
+  upgrade: false,              // منع محاولات الترقية لـ WebSocket لكي لا يصطدم بالـ Connection Refused
+  withCredentials: false,      // 👈 إلغاء طلب الـ Credentials تماماً لمنع ظهور الخطأ الأحمر في فايرفوكس
   forceNew: true,
   autoConnect: true,
   reconnectionAttempts: Infinity,
