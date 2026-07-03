@@ -43,11 +43,59 @@ mongoose.connect(mongoURI)
   .then(() => console.log("✅ متصل بـ MongoDB Atlas بنجاح ساحق"))
   .catch(err => console.error("❌ خطأ اتصال بـ MongoDB:", err));
 
+// ==========================================================================
+// 🛡️ [توحيد الحسم السيبراني لـ CORS] إنهاء أزمة حظر التراخيص بفايرفوكس للأبد
+// ==========================================================================
+const ALLOWED_ORIGINS = [
+    "https://the-honor.vercel.app",             // 👑 ممسوح منها الشرطة المائلة الزائدة لحسم التطابق
+    "https://puresoft-mainal-the-honor.hf.space",
+    "http://localhost:3000"
+];
+
 app.use(cors({
-    origin: ["https://the-honor.vercel.app", "https://puresoft-mainal-the-honor.hf.space"],
-    credentials: true,
+    origin: (origin, callback) => {
+        if (!origin || ALLOWED_ORIGINS.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS Blocking - غير مصرح بالعبور'));
+        }
+    },
+    credentials: true, // 👈 حقن شفرة 'true' الصارمة لإيقاف حظر فايرفوكس فوراً
     methods: ["GET", "POST", "DELETE"]
 }));
+
+app.use(express.json());
+
+// إعداد ملتر لرفع الملفات والستوريات
+const UPLOADS_DIR = path.join('/tmp', 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+app.use('/uploads', express.static(UPLOADS_DIR));
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+// تهيئة السوكيت (Socket.io) ليدعم الاتصالات المتزامنة والمطابقة للـ Credentials بالملي
+const io = new Server(server, {
+    cors: {
+        origin: ALLOWED_ORIGINS, // 👈 مطابقة النطاقات بالملي ثانية
+        methods: ["GET", "POST", "DELETE"],
+        credentials: true        // 👈 إرسال ترويسة true لمطابقة متطلبات الـ Polling لفايرفوكس
+    },
+    transports: ['polling', 'websocket'], // تأمين التبديل السحابي التلقائي الحامي من الحظر
+    allowEIO3: true,
+    pingTimeout: 60000,
+    pingInterval: 25000
+});
+
+global.io = io; 
+console.log("✅ تم تطهير جدران الـ CORS وتوحيد ترويسة Credentials بنجاح ساحق!");
+
 
 // 👑 [صياغة قفل الأمان السحابي الثابت] بناء وهيكلة جدول السوق بـ MongoDB Atlas للأبد
 const MarketSchema = new mongoose.Schema({
