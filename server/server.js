@@ -51,7 +51,7 @@ mongoose.connect(mongoURI)
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     // إذا كان الأصل قادماً من Vercel أو Hugging Face أو المطور المحلي، ثبته فوراً بصياغته النصية
-    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("hf.space") || origin.includes("localhost:3000"))) {
+    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("puresoft-mainal-the-honor.hf.space"))) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
     res.setHeader('Access-Control-Allow-Credentials', 'true'); // 👈 حقن نصي مباشر وصارم يسحق الـ Missing Allow Credentials
@@ -90,7 +90,6 @@ const io = new Server(server, {
         origin: [
             "https://vercel.app", 
             "https://puresoft-mainal-the-honor.hf.space",
-            "http://localhost:3000"
         ],
         methods: ["GET", "POST", "DELETE"],
         credentials: true // 👈 قفل المطابقة العتادية لـ Polling
