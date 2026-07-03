@@ -88,9 +88,10 @@ const io = new Server(server, {
             "https://puresoft-mainal-the-honor.hf.space" // 🔐 تم إبادة محلي localhost كلياً لفتح السعة والأمان
         ],
         methods: ["GET", "POST", "DELETE"],
-        credentials: true 
+        credentials: false 
     },
-    transports: ['polling', 'websocket'], 
+    transports: ['websocket'], 
+    path: '/honor-secure-ws/', // 👑 قفل مطابقة مسار النفق بالملي ثانية مع الفرونت إند لكسر الحظر كلياً
     allowEIO3: true,
     pingTimeout: 60000,
     pingInterval: 25000
