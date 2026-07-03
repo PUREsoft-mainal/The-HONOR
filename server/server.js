@@ -52,21 +52,34 @@ const ALLOWED_ORIGINS = [
     "http://localhost:3000"
 ];
 
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || ALLOWED_ORIGINS.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('CORS Blocking - غير مصرح بالعبور'));
-        }
-    },
-    credentials: true, // 👈 حقن شفرة 'true' الصارمة لإيقاف حظر فايرفوكس فوراً
-    methods: ["GET", "POST", "DELETE"]
-}));
+// ==========================================================================
+// 🛡️ [التثبيت السيادي الصلب لجدار الـ CORS] - التدمير الشامل لحظر فايرفوكس
+// ==========================================================================
+
+// 1️⃣ إجبار Express على ضخ الاستجابة الصارمة لكل أصل بشكل مباشر وثابت
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    // إذا كان الأصل قادماً من Vercel أو Hugging Face أو المطور المحلي، ثبته فوراً بصياغته النصية
+    if (origin && (origin.includes("the-honor.vercel.app") || origin.includes("hf.space") || origin.includes("localhost:3000"))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // 👈 حقن نصي مباشر وصارم يسحق الـ Missing Allow Credentials
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    
+    // التعامل مع طلبات الفحص المبدئية للمتصفحات (Preflight OPTIONS Requests) لتعبر فوراً دون عرقلة
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
+// 2️⃣ تعطيل حزمة Express CORS الديناميكية القديمة لتجنب تضارب الترويسات
+// (تأكد من مسح أو إغلاق كود app.use(cors(...)) القديم تماماً ليعمل الميدلوير المباشر بأعلى بنقاء)
 
 app.use(express.json());
 
-// إعداد ملتر لرفع الملفات والستوريات
+// 📁 إعداد ملتر والمجلدات 
 const UPLOADS_DIR = path.join('/tmp', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 app.use('/uploads', express.static(UPLOADS_DIR));
@@ -78,23 +91,27 @@ const storage = multer.diskStorage({
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+const upload = multer({ storage }); 
 
-// تهيئة السوكيت (Socket.io) ليدعم الاتصالات المتزامنة والمطابقة للـ Credentials بالملي
+// 3️⃣ إعادة صياغة محرك السوكيت (Socket.io) ليعتمد على الاستقبال الشامل المأمن بالـ Credentials
 const io = new Server(server, {
     cors: {
-        origin: ALLOWED_ORIGINS, // 👈 مطابقة النطاقات بالملي ثانية
+        origin: [
+            "https://vercel.app", 
+            "https://puresoft-mainal-the-honor.hf.space",
+            "http://localhost:3000"
+        ],
         methods: ["GET", "POST", "DELETE"],
-        credentials: true        // 👈 إرسال ترويسة true لمطابقة متطلبات الـ Polling لفايرفوكس
+        credentials: true // 👈 قفل المطابقة العتادية لـ Polling
     },
-    transports: ['polling', 'websocket'], // تأمين التبديل السحابي التلقائي الحامي من الحظر
+    transports: ['polling', 'websocket'], 
     allowEIO3: true,
     pingTimeout: 60000,
     pingInterval: 25000
 });
 
 global.io = io; 
-console.log("✅ تم تطهير جدران الـ CORS وتوحيد ترويسة Credentials بنجاح ساحق!");
+console.log("👑 [Sovereign CORS Overlay Injected] تم فرض الترويسات النصية الثابتة؛ فايرفوكس سيعبر الآن قسرياً!");
 
 
 // 👑 [صياغة قفل الأمان السحابي الثابت] بناء وهيكلة جدول السوق بـ MongoDB Atlas للأبد
