@@ -25,18 +25,15 @@ import HonorAiAssistant from './components/HonorAiAssistant'; // 👑 🤖 حق�
 import './App.css';
 
 // 👑 ربط الواجهة الأمامية بالسيرفر السحابي المباشر على Hugging Face
-const API_BASE = "https://puresoft-mainal-the-honor.hf.space";
-// ==========================================================================
-// 🛡️ [قفل العبور السحابي الهجين] - سحق حظر الـ Connection Refused للأبد
-// ==========================================================================
-const socket = io(API_BASE, {
-  transports: ['polling'],     // 👈 الحسم البرمجي: العبور بنمط Polling كطلبات ويب طبيعية لا يحظرها جدار السحاب
-  upgrade: false,              // منع محاولات الترقية لـ WebSocket لكي لا يصطدم بالـ Connection Refused
-  withCredentials: false,      // 👈 إلغاء طلب الـ Credentials تماماً لمنع ظهور الخطأ الأحمر في فايرفوكس
-  forceNew: true,
-  autoConnect: true,
-  reconnectionAttempts: Infinity,
-  timeout: 10000
+const API_BASE = "https://puresoft-mainal-ouro-steps.hf.space";
+
+// 👑 تهيئة السوكت النقي والمتوافق مع جدار حماية خوادم Hugging Face لاختراق البروكسي
+const socket = io(API_BASE, { 
+  transports: ['websocket', 'polling'],
+  secure: true,
+  reconnectionAttempts: 15,
+  reconnectionDelay: 1000,
+  rejectUnauthorized: false
 });
 
 
